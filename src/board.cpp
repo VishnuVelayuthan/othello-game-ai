@@ -42,12 +42,14 @@ Board::Board(std::string file_name) {
         buffer = istringstream(line);
         this->g_board[i] = new Tile*[this->BOARD_SIZE];
         
-        string::const_iterator li_it = line.begin();
         for (int j = 0; j < this->BOARD_SIZE; j++) {
-            // curr_tile_p = *(li_it);
             buffer >> curr_tile_p;
             this->g_board[i][j] = new Tile(i, j, curr_tile_p);
-            ++li_it;
+
+            if (curr_tile_p == 'X') 
+                n_x_tiles++;
+            else if (curr_tile_p == 'O')
+                n_o_tiles++;
         }
 
     }
@@ -61,10 +63,21 @@ Board::~Board() {
         } 
         delete [] this->g_board[i];
     }
+
+    delete [] allowed_moves;
 }
 
 char Board::getCurrTurnPlayer() {
     return this->curr_turn_player;
+}
+
+void Board::calculateBoardMoves(char player) {
+    if (allowed_moves) delete [] allowed_moves;
+    this->allowed_moves = new unordered_set<Move>();
+
+
+
+    
 }
 
 Board* Board::makeMove(char move) {

@@ -21,14 +21,14 @@ public:
 private:
     Tile*** g_board;
 
-    std::unordered_set<Move> calculateBoardMoves(char player);
+    void calculateBoardMoves(char player);
     char curr_turn_player;
 
     int n_x_tiles;
     int n_o_tiles; 
 
     int n_allowed_moves;
-    std::unordered_set<Move> allowed_moves;
+    std::unordered_set<Move>* allowed_moves;
 
 };
 
