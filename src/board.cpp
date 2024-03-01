@@ -76,9 +76,24 @@ Board::~Board() {
     delete [] allowed_moves;
 }
 
-char Board::getCurrTurnPlayer() {
-    return this->curr_turn_player;
+void Board::updateXOtileCount() {
+    this->n_o_tiles = 0;
+    this->n_x_tiles = 0;
+
+    Tile* curr_tile;
+    for (int i = 0; i < BOARD_SIZE; i++) {
+        for (int j = 0; j < BOARD_SIZE; j++) {
+            curr_tile = this->g_board[i][j];
+            if (!curr_tile->isOccupied()) continue;
+
+            if (curr_tile->getPlayerOcc() == 'X') n_x_tiles++;
+            else n_o_tiles++;
+        }
+    }
 }
+
+
+
 
 void Board::calculateBoardMoves(char player) {
 
@@ -165,4 +180,24 @@ Board* Board::copyBoard() {
 
 void Board::makeMove(Move* n_move) {
 
+    // flipPiecesUp(this->g_board, BOARD_SIZE, n_move);
+    // flipPiecesDown(this->g_board, BOARD_SIZE, n_move);
+    //
+    // flipPiecesLeft(this->g_board, BOARD_SIZE, n_move);
+    // flipPiecesRight(this->g_board, BOARD_SIZE, n_move);
+    //
+    // flipPiecesLUD(this->g_board, BOARD_SIZE, n_move);
+    // flipPiecesRUD(this->g_board, BOARD_SIZE, n_move);
+    //
+    // flipPiecesLDD(this->g_board, BOARD_SIZE, n_move);
+    // flipPiecesRDD(this->g_board, BOARD_SIZE, n_move);
+
+    this->curr_turn_player = curr_turn_player == 'X' ? 'O' : 'X';
+
+    this->updateXOtileCount();
+    this->calculateBoardMoves(this->curr_turn_player);
+}
+
+char Board::getCurrTurnPlayer() {
+    return this->curr_turn_player;
 }

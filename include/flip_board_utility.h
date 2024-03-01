@@ -16,6 +16,4 @@ void flipPiecesRUD(Tile*** g_board, int b_size, Move* n_move);
 void flipPiecesLDD(Tile*** g_board, int b_size, Move* n_move);
 void flipPiecesRDD(Tile*** g_board, int b_size, Move* n_move);
 
-
-
 #endif

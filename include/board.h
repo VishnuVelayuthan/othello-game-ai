@@ -4,6 +4,7 @@
 #include "./move.h"
 #include "./tile.h"
 #include "./check_board_utility.h"
+#include "./flip_board_utility.h"
 
 #include <string>
 #include <unordered_set>
@@ -24,8 +25,6 @@ public:
 
 private:
     Tile*** g_board;
-
-    void calculateBoardMoves(char player);
     char curr_turn_player;
 
     int n_x_tiles;
@@ -34,6 +33,8 @@ private:
     int n_allowed_moves;
     std::unordered_set<Move*>* allowed_moves;
 
+    void calculateBoardMoves(char player);
+    void updateXOtileCount();
 };
 
 #endif
