@@ -3,6 +3,7 @@
 
 #include "./move.h"
 #include "./tile.h"
+#include "./board_utility.h"
 
 #include <string>
 #include <unordered_set>
@@ -28,7 +29,7 @@ private:
     int n_o_tiles; 
 
     int n_allowed_moves;
-    std::unordered_set<Move>* allowed_moves;
+    std::unordered_set<Move*>* allowed_moves;
 
 };
 

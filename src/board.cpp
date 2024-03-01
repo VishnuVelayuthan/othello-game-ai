@@ -54,6 +54,9 @@ Board::Board(std::string file_name) {
 
     }
 
+    this->calculateBoardMoves(this->curr_turn_player);
+
+
 }
 
 Board::~Board() {
@@ -64,6 +67,10 @@ Board::~Board() {
         delete [] this->g_board[i];
     }
 
+    unordered_set<Move*>::iterator it;
+    for (it = allowed_moves->begin(); it != allowed_moves->end(); ++it) 
+        delete *(it);
+
     delete [] allowed_moves;
 }
 
@@ -72,10 +79,66 @@ char Board::getCurrTurnPlayer() {
 }
 
 void Board::calculateBoardMoves(char player) {
-    if (allowed_moves) delete [] allowed_moves;
-    this->allowed_moves = new unordered_set<Move>();
+
+    this->allowed_moves = new unordered_set<Move*>();
+    
+    Tile* curr_tile;
+    Move* new_move;
+    for (int i = 0; i < BOARD_SIZE; i++) {
+
+        for (int j = 0; j < BOARD_SIZE; j++) {
+            curr_tile = g_board[i][j];
+
+            if (!curr_tile->isOccupied() || !curr_tile->isPlayerOcc(player)) 
+                continue;
+
+            // Check Up potential
+            new_move = checkBoardUp(g_board, BOARD_SIZE, curr_tile, player);
+            if (!new_move->isNull())
+                allowed_moves->insert(new_move);
+
+            // Check down potential move
+            new_move = checkBoardDown(g_board, BOARD_SIZE, curr_tile, player);
+            if (!new_move->isNull())
+                allowed_moves->insert(new_move);
+
+            // Check left poetential move
+            new_move = checkBoardLeft(g_board, BOARD_SIZE, curr_tile, player);
+            if (!new_move->isNull())
+                allowed_moves->insert(new_move);
+            
+            // Check right poetential move
+            new_move = checkBoardRight(g_board, BOARD_SIZE, curr_tile, player);
+            if (!new_move->isNull())
+                allowed_moves->insert(new_move);
+
+            // Check left upper diagonal poetential move
+            new_move = checkBoardLUD(g_board, BOARD_SIZE, curr_tile, player);
+            if (!new_move->isNull())
+                allowed_moves->insert(new_move);
+
+            // Check right upper diagonal poetential move
+            new_move = checkBoardRUD(g_board, BOARD_SIZE, curr_tile, player);
+            if (!new_move->isNull())
+                allowed_moves->insert(new_move);
+
+            // Check left down diagonal poetential move
+            new_move = checkBoardLDD(g_board, BOARD_SIZE, curr_tile, player);
+            if (!new_move->isNull())
+                allowed_moves->insert(new_move);
+
+            // Check right down diagonal poetential move
+            new_move = checkBoardRDD(g_board, BOARD_SIZE, curr_tile, player);
+            if (!new_move->isNull())
+                allowed_moves->insert(new_move);
 
 
+        }
+
+    }
+
+
+    int x = 0;
 
     
 }

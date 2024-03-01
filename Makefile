@@ -6,13 +6,16 @@ INCLUDEDIR = include
 CC = g++
 CFLAGS = -Wall -g -I $(INCLUDEDIR) -std=c++17
 
-all: build/main.o build/board.o | $(BUILDDIR)
+all: build/main.o build/board.o build/board_utility.o | $(BUILDDIR)
 	$(CC) $(CFLAGS) -o main-othello-game $^
 
 build/main.o: $(SRCDIR)/homework.cpp | $(BUILDDIR)	
 	$(CC) $(CFLAGS) -c $< -o $@
 
 build/board.o: $(SRCDIR)/board.cpp $(INCLUDEDIR)/board.h $(INCLUDEDIR)/tile.h $(INCLUDEDIR)/move.h | $(BUILDDIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+build/board_utility.o: $(SRCDIR)/board_utility.cpp $(INCLUDEDIR)/board_utility.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean: 
