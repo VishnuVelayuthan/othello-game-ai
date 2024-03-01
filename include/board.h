@@ -3,7 +3,7 @@
 
 #include "./move.h"
 #include "./tile.h"
-#include "./board_utility.h"
+#include "./check_board_utility.h"
 
 #include <string>
 #include <unordered_set>

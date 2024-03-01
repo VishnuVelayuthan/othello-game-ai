@@ -15,7 +15,7 @@ build/main.o: $(SRCDIR)/homework.cpp | $(BUILDDIR)
 build/board.o: $(SRCDIR)/board.cpp $(INCLUDEDIR)/board.h $(INCLUDEDIR)/tile.h $(INCLUDEDIR)/move.h | $(BUILDDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-build/board_utility.o: $(SRCDIR)/board_utility.cpp $(INCLUDEDIR)/board_utility.h
+build/check_board_utility.o: $(SRCDIR)/check_board_utility.cpp $(INCLUDEDIR)/check_board_utility.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean: 
