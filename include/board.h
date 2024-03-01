@@ -13,11 +13,14 @@ public:
     static int BOARD_SIZE;
 
     Board(std::string file_name);
-    Board(Board curr_board, Move n_move);
+    Board();
+
     ~Board(); 
 
     char getCurrTurnPlayer();
-    Board* makeMove(char move);
+    
+    Board* copyBoard();
+    void makeMove(Move* n_move);
 
 private:
     Tile*** g_board;

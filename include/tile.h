@@ -8,9 +8,15 @@ public:
         this->i_row = row;
         this->i_col = col;
         this->c_col = (97 + col);
-
         this->p_occ = player_occ;
     };
+
+    Tile(Tile* o_tile) {
+        this->i_row = o_tile->i_row;
+        this->i_col = o_tile->i_col;
+        this->c_col = (97 + o_tile->i_col);
+        this->p_occ = o_tile->p_occ;
+    }
 
     inline int getIrow() {return this->i_row;};
     inline int getIcol() {return this->i_col;};
@@ -28,7 +34,6 @@ private:
     char c_col; // letter from a - l
 
     char p_occ;
-
 };
 
 #endif

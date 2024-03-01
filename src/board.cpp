@@ -9,6 +9,8 @@ using namespace std;
 
 int Board::BOARD_SIZE = 12;
 
+Board::Board() : g_board(), curr_turn_player(), n_x_tiles(), n_o_tiles(), allowed_moves() {}
+
 Board::Board(std::string file_name) {
 
     ifstream infile = std::ifstream(file_name);
@@ -132,17 +134,35 @@ void Board::calculateBoardMoves(char player) {
             if (!new_move->isNull())
                 allowed_moves->insert(new_move);
 
-
         }
 
     }
-
-
-    int x = 0;
-
     
+    this->n_allowed_moves = allowed_moves->size();
 }
 
-Board* Board::makeMove(char move) {
-    return nullptr;
+Board* Board::copyBoard() {
+
+    Board* n_board = new Board();
+
+    Tile*** n_g_board = new Tile**[BOARD_SIZE];
+
+    for (int i = 0; i < BOARD_SIZE; i++) {
+        n_g_board[i] = new Tile*[BOARD_SIZE];
+        for (int j = 0; j < BOARD_SIZE; j++) {
+            n_g_board[i][j] = new Tile(this->g_board[i][j]);
+        }
+    }
+
+    n_board->g_board = n_g_board;
+    n_board->curr_turn_player = this->curr_turn_player;
+
+    n_board->n_o_tiles = this->n_o_tiles;
+    n_board->n_x_tiles = this->n_x_tiles;
+
+    return n_board;
+}
+
+void Board::makeMove(Move* n_move) {
+
 }

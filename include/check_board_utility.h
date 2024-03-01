@@ -1,6 +1,5 @@
-
-#ifndef BOARD_UTILITY_H
-#define BOARD_UTILITY_H
+#ifndef CHECK_BOARD_UTILITY_H
+#define CHECK_BOARD_UTILITY_H
 
 #include "./move.h"
 #include "./board.h"
