@@ -93,7 +93,7 @@ void flipPiecesLUD(Tile*** g_board, int b_size, Move* n_move) {
 
     Tile* curr_tile; 
     for (int i = 0; i < b_size - flip_col; i++) {
-        curr_tile = g_board[flip_row][flip_col + i];
+        curr_tile = g_board[flip_row + i][flip_col + i];
 
         if (curr_tile->getPlayerOcc() == flip_player) 
             return;

@@ -206,6 +206,8 @@ void Board::makeMove(Move* n_move) {
             case FlipType::LEFT:
                 flipPiecesLeft(this->g_board, BOARD_SIZE, n_move);
                 break;
+            case FlipType::RIGHT:
+                flipPiecesRight(this->g_board, BOARD_SIZE, n_move);
             case FlipType::LUD:
                 flipPiecesLUD(this->g_board, BOARD_SIZE, n_move);
                 break;
@@ -221,8 +223,6 @@ void Board::makeMove(Move* n_move) {
         }
 
     }
-
-    flipPiecesRight(this->g_board, BOARD_SIZE, n_move);
 
     this->curr_turn_player = curr_turn_player == 'X' ? 'O' : 'X';
 
