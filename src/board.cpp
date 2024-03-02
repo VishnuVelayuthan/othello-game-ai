@@ -72,6 +72,8 @@ Board::~Board() {
         delete [] this->g_board[i];
     }
 
+    delete g_board;
+
     // unordered_set<Move*, std::hash<Move*>, MovePointerDefEqual>::iterator it;
     // for (it = allowed_moves->begin(); it != allowed_moves->end(); ++it) 
     //     delete *(it);
@@ -102,6 +104,10 @@ void Board::updateXOtileCount() {
 
 
 void Board::calculateBoardMoves(char player) {
+
+    if (this->allowed_moves) {
+        this->allowed_moves->clear();
+    }
 
     this->allowed_moves = new unordered_set<Move*, std::hash<Move*>, MovePointerDefEqual>();
     
