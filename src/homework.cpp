@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "../include/board.h"
+#include "../include/check_board_utility.h"
 
 using namespace std;
 
@@ -13,4 +14,6 @@ int main() {
     Tile tile = Tile(0, 1, '.');
     cout << tile.getIcol() << endl;
 
+    deleteNullMove();
+    
 }

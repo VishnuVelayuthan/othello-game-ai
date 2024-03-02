@@ -3,11 +3,15 @@
 
 #include "./move.h"
 #include "./tile.h"
-#include "./check_board_utility.h"
-#include "./flip_board_utility.h"
 
 #include <string>
 #include <unordered_set>
+
+struct MovePointerDefEqual{
+    bool operator()(const Move* a, const Move* b) const {
+        return *(a) == *(b);
+    }
+};
 
 class Board {
 public:
@@ -31,7 +35,7 @@ private:
     int n_o_tiles; 
 
     int n_allowed_moves;
-    std::unordered_set<Move*>* allowed_moves;
+    std::unordered_set<Move*, std::hash<Move*>, MovePointerDefEqual>* allowed_moves;
 
     void calculateBoardMoves(char player);
     void updateXOtileCount();
