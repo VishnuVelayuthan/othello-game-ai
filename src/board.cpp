@@ -190,17 +190,39 @@ Board* Board::copyBoard() {
 
 void Board::makeMove(Move* n_move) {
 
-    // flipPiecesUp(this->g_board, BOARD_SIZE, n_move);
-    // flipPiecesDown(this->g_board, BOARD_SIZE, n_move);
-    //
-    // flipPiecesLeft(this->g_board, BOARD_SIZE, n_move);
-    // flipPiecesRight(this->g_board, BOARD_SIZE, n_move);
-    //
-    // flipPiecesLUD(this->g_board, BOARD_SIZE, n_move);
-    // flipPiecesRUD(this->g_board, BOARD_SIZE, n_move);
-    //
-    // flipPiecesLDD(this->g_board, BOARD_SIZE, n_move);
-    // flipPiecesRDD(this->g_board, BOARD_SIZE, n_move);
+    const  std::vector<FlipType>& n_move_fts = n_move->getFlipTypes();
+
+    FlipType curr_ft;
+    for (int i = 0; i < n_move_fts.size(); i++) {
+        curr_ft = n_move_fts[i];
+
+        switch (curr_ft){
+            case FlipType::UP:            
+                flipPiecesUp(this->g_board, BOARD_SIZE, n_move);
+                break;
+            case FlipType::DOWN:
+                flipPiecesDown(this->g_board, BOARD_SIZE, n_move);
+                break;
+            case FlipType::LEFT:
+                flipPiecesLeft(this->g_board, BOARD_SIZE, n_move);
+                break;
+            case FlipType::LUD:
+                flipPiecesLUD(this->g_board, BOARD_SIZE, n_move);
+                break;
+            case FlipType::RUD:
+                flipPiecesRUD(this->g_board, BOARD_SIZE, n_move);
+                break;
+            case FlipType::LDD:
+                flipPiecesLDD(this->g_board, BOARD_SIZE, n_move);
+                break;
+            default:
+                flipPiecesRDD(this->g_board, BOARD_SIZE, n_move);
+                break;
+        }
+
+    }
+
+    flipPiecesRight(this->g_board, BOARD_SIZE, n_move);
 
     this->curr_turn_player = curr_turn_player == 'X' ? 'O' : 'X';
 

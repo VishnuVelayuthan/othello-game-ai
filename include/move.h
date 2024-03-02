@@ -47,6 +47,7 @@ public:
     inline int getIrow() {return this->row;};
     inline int getIcol() {return this->col;};
     inline char getPlayer() {return this->m_player;};
+    inline const std::vector<FlipType>& getFlipTypes() {return this->flipTypes;};
 
 
 private:
