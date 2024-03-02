@@ -7,6 +7,7 @@
 #include <sstream>
 #include <string>
 #include <stdexcept>
+#include <iostream>
 
 using namespace std;
 
@@ -74,14 +75,11 @@ Board::~Board() {
 
     delete g_board;
 
-    // unordered_set<Move*, std::hash<Move*>, MovePointerDefEqual>::iterator it;
-    // for (it = allowed_moves->begin(); it != allowed_moves->end(); ++it) 
-    //     delete *(it);
-
     for (Move* move : *(allowed_moves)) 
         delete move;
 
     allowed_moves->clear();
+    delete allowed_moves;
 }
 
 void Board::updateXOtileCount() {
@@ -106,7 +104,7 @@ void Board::updateXOtileCount() {
 void Board::calculateBoardMoves(char player) {
 
     if (this->allowed_moves) {
-        this->allowed_moves->clear();
+        // this->allowed_moves->clear();
     }
 
     this->allowed_moves = new unordered_set<Move*, std::hash<Move*>, MovePointerDefEqual>();
