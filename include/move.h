@@ -18,9 +18,11 @@ enum class FlipType : short {
 
 class Move {
 public:
-    Move(int row, int col, char m_player) :
+    Move(int row, int col, char m_player, FlipType iniType) :
         row(row), col(col), m_player(m_player), flipTypes()
-    {};
+    {
+        flipTypes.push_back(iniType);
+    };
     
     friend bool operator==(const Move& lhs, const Move& rhs) {
         return lhs.row == rhs.row && lhs.col == rhs.col && lhs.m_player == rhs.m_player;
