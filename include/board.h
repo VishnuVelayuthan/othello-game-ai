@@ -23,9 +23,12 @@ public:
     ~Board(); 
 
     char getCurrTurnPlayer();
+    std::unordered_set<Move*, std::hash<Move*>, MovePointerDefEqual>* getAllowedMoves() {return this->allowed_moves;};
     
     Board* copyBoard();
     void makeMove(Move* n_move);
+
+    std::string toString();
 
 private:
     Tile*** g_board;

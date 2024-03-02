@@ -11,7 +11,7 @@ void flipPiecesUp(Tile*** g_board, int b_size, Move* n_move) {
 
     Tile* curr_tile; 
 
-    for (int i = 1; i < flip_row; i++) {
+    for (int i = 0; i < flip_row; i++) {
         curr_tile = g_board[flip_row - i][flip_col];
 
         if (curr_tile->getPlayerOcc() == flip_player) 
@@ -32,7 +32,7 @@ void flipPiecesDown(Tile*** g_board, int b_size, Move* n_move) {
 
     Tile* curr_tile; 
 
-    for (int i = 1; i < b_size - flip_row; i++) {
+    for (int i = 0; i < b_size - flip_row; i++) {
         curr_tile = g_board[flip_row + i][flip_col];
 
         if (curr_tile->getPlayerOcc() == flip_player) 
@@ -52,7 +52,7 @@ void flipPiecesLeft(Tile*** g_board, int b_size, Move* n_move) {
         return;
 
     Tile* curr_tile; 
-    for (int i = 1; i < flip_col; i++) {
+    for (int i = 0; i < flip_col; i++) {
         curr_tile = g_board[flip_row][flip_col - i];
 
         if (curr_tile->getPlayerOcc() == flip_player) 
@@ -72,7 +72,7 @@ void flipPiecesRight(Tile*** g_board, int b_size, Move* n_move) {
         return;
 
     Tile* curr_tile; 
-    for (int i = 1; i < b_size - flip_col; i++) {
+    for (int i = 0; i < b_size - flip_col; i++) {
         curr_tile = g_board[flip_row][flip_col + i];
 
         if (curr_tile->getPlayerOcc() == flip_player) 
@@ -92,7 +92,7 @@ void flipPiecesLUD(Tile*** g_board, int b_size, Move* n_move) {
         return;
 
     Tile* curr_tile; 
-    for (int i = 1; i < b_size - flip_col; i++) {
+    for (int i = 0; i < b_size - flip_col; i++) {
         curr_tile = g_board[flip_row][flip_col + i];
 
         if (curr_tile->getPlayerOcc() == flip_player) 

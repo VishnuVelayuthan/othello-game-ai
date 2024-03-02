@@ -233,3 +233,21 @@ void Board::makeMove(Move* n_move) {
 char Board::getCurrTurnPlayer() {
     return this->curr_turn_player;
 }
+
+string Board::toString() {
+    string board_string = "";
+
+    Tile* curr_tile;
+    for (int i = 0; i < BOARD_SIZE; i++) {
+
+        for (int j = 0; j < BOARD_SIZE; j++) {
+            curr_tile = g_board[i][j];
+
+            board_string += curr_tile->getPlayerOcc();
+        }
+
+        board_string += "\n";
+    }
+
+    return board_string;
+}
