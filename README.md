@@ -23,3 +23,12 @@ TODO
 - Do minimax
 - Do alpha-beta pruning
 - Do goated evaluation
+- Have to think about persistent game state
+  - keep track of your moves and opponents move
+  - keep track of last game state
+    - use last game state to calculate opponents move
+  - keep track of previous allowed moves
+  - then use their move to calculate how allowed moves changes
+    - HUGE OPTIMIZATION
+- Have to also think about calibration
+  - needa discuss with other people how they did their calibration

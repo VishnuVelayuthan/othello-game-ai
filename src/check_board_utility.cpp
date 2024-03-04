@@ -1,5 +1,7 @@
 #include "../include/check_board_utility.h"
+
 #include <algorithm>
+#include <iostream>
 
 using namespace std;
 
@@ -15,7 +17,7 @@ Move* checkBoardUp(Tile*** g_board, int b_size, unordered_set<Move*, hash<Move*>
     int check_row = check_tile->getIrow();
     int check_col = check_tile->getIcol();
 
-    if (check_row == 0) 
+    if (check_row <= 1) 
         return null_move;
 
     Tile* curr_tile = g_board[check_row-1][check_col];
@@ -51,7 +53,7 @@ Move* checkBoardDown(Tile*** g_board, int b_size, unordered_set<Move*, hash<Move
     int check_row = check_tile->getIrow();
     int check_col = check_tile->getIcol();
 
-    if (check_row == b_size - 1) return null_move;
+    if (check_row >= b_size - 2) return null_move;
 
     Tile* curr_tile = g_board[check_row+1][check_col];
 
@@ -86,7 +88,7 @@ Move* checkBoardRight(Tile*** g_board, int b_size, unordered_set<Move*, hash<Mov
     int check_row = check_tile->getIrow();
     int check_col = check_tile->getIcol();
 
-    if (check_col == b_size - 1) return null_move;
+    if (check_col >= b_size - 2) return null_move;
     
     Tile* curr_tile = g_board[check_row][check_col+1];
 
@@ -123,7 +125,7 @@ Move* checkBoardLeft(Tile*** g_board, int b_size, unordered_set<Move*, hash<Move
     int check_row = check_tile->getIrow();
     int check_col = check_tile->getIcol();
 
-    if (check_col == 0) return null_move;
+    if (check_col <= 1) return null_move;
     
     Tile* curr_tile = g_board[check_row][check_col-1];
 
@@ -140,8 +142,9 @@ Move* checkBoardLeft(Tile*** g_board, int b_size, unordered_set<Move*, hash<Move
             Move* new_move = new Move(curr_tile->getIrow(), curr_tile->getIcol(), curr_player, flip_type);
 
             auto a_it = allowed_moves->find(new_move);
-            if (a_it == allowed_moves->end())
+            if (a_it == allowed_moves->end()) {
                 return new_move;
+            }
 
             (*(a_it))->addType(flip_type); 
             delete new_move;
@@ -158,14 +161,14 @@ Move* checkBoardLUD(Tile*** g_board, int b_size, unordered_set<Move*, hash<Move*
     int check_row = check_tile->getIrow();
     int check_col = check_tile->getIcol();
 
-    if (check_col == 0 || check_row == 0) return null_move;
+    if (check_col <= 1 || check_row <= 1) return null_move;
 
     Tile* curr_tile = g_board[check_row-1][check_col-1];
 
     if (!curr_tile->isOccupied() || curr_tile->getPlayerOcc() == curr_player)
         return null_move;
 
-    for (int k = 2; k <= std::min(check_row, check_col) ; k++) {
+    for (int k = 2; k < std::min(check_row, check_col) ; k++) {
         curr_tile = g_board[check_row - k][check_col - k];
 
         if (curr_tile->getPlayerOcc() == curr_player) 
@@ -194,14 +197,14 @@ Move* checkBoardRUD(Tile*** g_board, int b_size, unordered_set<Move*, hash<Move*
     int check_row = check_tile->getIrow();
     int check_col = check_tile->getIcol();
 
-    if ((check_col == (b_size - 1))  || check_row == 0) return null_move;
+    if ((check_col >= (b_size - 2))  || check_row <= 1) return null_move;
 
     Tile* curr_tile = g_board[check_row-1][check_col+1];
 
     if (!curr_tile->isOccupied() || curr_tile->getPlayerOcc() == curr_player)
         return null_move;
 
-    for (int k = 2; k <= std::min(check_row, b_size - check_col) ; k++) {
+    for (int k = 2; k < std::min(check_row, b_size - check_col) ; k++) {
         curr_tile = g_board[check_row - k][check_col + k];
 
         if (curr_tile->getPlayerOcc() == curr_player) 
@@ -231,14 +234,14 @@ Move* checkBoardLDD(Tile*** g_board, int b_size, unordered_set<Move*, hash<Move*
     int check_row = check_tile->getIrow();
     int check_col = check_tile->getIcol();
 
-    if (check_col == 0  || check_row == b_size-1) return null_move;
+    if (check_col <= 1  || check_row >= b_size-2) return null_move;
 
     Tile* curr_tile = g_board[check_row+1][check_col-1];
 
     if (!curr_tile->isOccupied() || curr_tile->getPlayerOcc() == curr_player)
         return null_move;
 
-    for (int k = 2; k <= std::min(b_size - check_row,  check_col) ; k++) {
+    for (int k = 2; k < std::min(b_size - check_row,  check_col) ; k++) {
         curr_tile = g_board[check_row + k][check_col - k];
 
         if (curr_tile->getPlayerOcc() == curr_player) 
@@ -268,14 +271,14 @@ Move* checkBoardRDD(Tile*** g_board, int b_size, unordered_set<Move*, hash<Move*
     int check_row = check_tile->getIrow();
     int check_col = check_tile->getIcol();
 
-    if (check_col == b_size-1  || check_row == b_size-1) return null_move;
+    if (check_col >= b_size-2  || check_row >= b_size-2) return null_move;
 
     Tile* curr_tile = g_board[check_row+1][check_col+1];
 
     if (!curr_tile->isOccupied() || curr_tile->getPlayerOcc() == curr_player)
         return null_move;
 
-    for (int k = 2; k <= std::min(b_size - check_row,  b_size - check_col) ; k++) {
+    for (int k = 2; k < std::min(b_size - check_row,  b_size - check_col) ; k++) {
         curr_tile = g_board[check_row + k][check_col + k];
 
         if (curr_tile->getPlayerOcc() == curr_player) 

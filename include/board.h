@@ -23,6 +23,9 @@ public:
     ~Board(); 
 
     char getCurrTurnPlayer();
+    double getNumXTiles() {return this->n_x_tiles;};
+    double getNumOTiles() {return this->n_o_tiles;};
+
     std::unordered_set<Move*, std::hash<Move*>, MovePointerDefEqual>* getAllowedMoves() {return this->allowed_moves;};
     
     Board* copyBoard();
