@@ -5,15 +5,14 @@
 #include <iostream>
 
 
-MMScoreMove* minimaxMaxABValue(Board* cs_board, int ply_count, char opt_player, double alpha, double beta);
-MMScoreMove* minimaxMinABValue(Board* cs_board, int ply_count, char opt_player, double alpha, double beta);
+MMScoreMove* minimaxMaxValue(Board* cs_board, int ply_count, char opt_player);
+MMScoreMove* minimaxMinValue(Board* cs_board, int ply_count, char opt_player);
 
-Move* minimaxAlphaBetaSearch(Board* s_board, int ply_count) {
+Move* minimaxSearch(Board* s_board, int ply_count) {
 
     char opt_player = s_board->getCurrTurnPlayer();
 
-    MMScoreMove* opt_mmsm = minimaxMaxValue(s_board, ply_count, opt_player, 
-            -std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
+    MMScoreMove* opt_mmsm = minimaxMaxValue(s_board, ply_count, opt_player);
 
     Move* opt_move = opt_mmsm->getMove();
     delete opt_mmsm;
@@ -21,7 +20,7 @@ Move* minimaxAlphaBetaSearch(Board* s_board, int ply_count) {
     return opt_move;
 }
 
-MMScoreMove* minimaxMaxABValue(Board* cs_board, int ply_count, char opt_player, double alpha, double beta) {
+MMScoreMove* minimaxMaxValue(Board* cs_board, int ply_count, char opt_player) {
     if (ply_count == 0) 
         return new MMScoreMove(evaluateBoard(cs_board, opt_player), nullptr);
 
@@ -38,27 +37,21 @@ MMScoreMove* minimaxMaxABValue(Board* cs_board, int ply_count, char opt_player, 
         new_board = cs_board->copyBoard();
         new_board->makeMove(curr_operator);
 
-        curr_min = minimaxMinABValue(new_board, ply_count - 1, opt_player, alpha, beta);
+        curr_min = minimaxMinValue(new_board, ply_count - 1, opt_player);
         
-        // TODO Need a tie condition 
         if (curr_min->getScore() > max_min_sm->getScore()) {
             max_min_sm->setScore(curr_min->getScore());
             max_min_sm->setMove(curr_operator);
-            alpha = std::max(alpha, curr_min->getScore());
         }
 
         delete curr_min;
         delete new_board;
-
-        // TODO Need a tie condition 
-        if (curr_min->getScore() >= beta) 
-            return max_min_sm;
     }
 
     return max_min_sm;
 } 
 
-MMScoreMove* minimaxMinABValue(Board* cs_board, int ply_count, char opt_player, double alpha, double beta) {
+MMScoreMove* minimaxMinValue(Board* cs_board, int ply_count, char opt_player) { 
     if (ply_count == 0) 
         return new MMScoreMove(evaluateBoard(cs_board, opt_player), nullptr);
 
@@ -75,21 +68,15 @@ MMScoreMove* minimaxMinABValue(Board* cs_board, int ply_count, char opt_player, 
         new_board = cs_board->copyBoard();
         new_board->makeMove(curr_operator);
 
-        curr_max = minimaxMaxValue(new_board, ply_count - 1, opt_player, alpha, beta);
+        curr_max = minimaxMaxValue(new_board, ply_count - 1, opt_player);
         
-        // TODO need a tie condition
         if (curr_max->getScore() < min_max_sm->getScore()) {
             min_max_sm->setScore(curr_max->getScore());
             min_max_sm->setMove(curr_operator);
-            beta = std::min(beta, curr_max->getScore());
         }
 
         delete curr_max;
         delete new_board;
-
-        // Need a tie condition
-        if (curr_max->getScore() <= alpha)
-            return min_max_sm;
     }
 
     return min_max_sm;
