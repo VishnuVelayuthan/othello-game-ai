@@ -12,7 +12,7 @@ Move* minimaxAlphaBetaSearch(Board* s_board, int ply_count) {
 
     char opt_player = s_board->getCurrTurnPlayer();
 
-    MMScoreMove* opt_mmsm = minimaxMaxValue(s_board, ply_count, opt_player, 
+    MMScoreMove* opt_mmsm = minimaxMaxABValue(s_board, ply_count, opt_player, 
             -std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
 
     Move* opt_move = opt_mmsm->getMove();
@@ -75,7 +75,7 @@ MMScoreMove* minimaxMinABValue(Board* cs_board, int ply_count, char opt_player, 
         new_board = cs_board->copyBoard();
         new_board->makeMove(curr_operator);
 
-        curr_max = minimaxMaxValue(new_board, ply_count - 1, opt_player, alpha, beta);
+        curr_max = minimaxMaxABValue(new_board, ply_count - 1, opt_player, alpha, beta);
         
         // TODO need a tie condition
         if (curr_max->getScore() < min_max_sm->getScore()) {
