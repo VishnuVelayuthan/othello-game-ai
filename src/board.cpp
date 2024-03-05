@@ -11,8 +11,6 @@
 
 using namespace std;
 
-int Board::BOARD_SIZE = 12;
-
 Board::Board() : g_board(), curr_turn_player(), n_x_tiles(), n_o_tiles(), allowed_moves() {}
 
 Board::Board(std::string file_name) {
@@ -60,7 +58,7 @@ Board::Board(std::string file_name) {
 
     }
 
-    this->calculateBoardMoves(this->curr_turn_player);
+    this->allowed_moves = this->calculateBoardMoves(this->curr_turn_player);
 
 
 }
@@ -101,13 +99,10 @@ void Board::updateXOtileCount() {
 
 
 
-void Board::calculateBoardMoves(char player) {
+std::unordered_set<Move*, std::hash<Move*>, MovePointerDefEqual>* Board::calculateBoardMoves(char player) {
 
-    if (this->allowed_moves) {
-        // this->allowed_moves->clear();
-    }
-
-    this->allowed_moves = new unordered_set<Move*, std::hash<Move*>, MovePointerDefEqual>();
+    std::unordered_set<Move*, std::hash<Move*>, MovePointerDefEqual>*
+        allowed_moves = new unordered_set<Move*, std::hash<Move*>, MovePointerDefEqual>();
     
     Tile* curr_tile;
     Move* new_move;
@@ -158,12 +153,12 @@ void Board::calculateBoardMoves(char player) {
             new_move = checkBoardRDD(g_board, BOARD_SIZE, allowed_moves, curr_tile, player);
             if (!new_move->isNull())
                 allowed_moves->insert(new_move);
-
         }
 
     }
     
     this->n_allowed_moves = allowed_moves->size();
+    return allowed_moves;
 }
 
 Board* Board::copyBoard() {
@@ -227,7 +222,7 @@ void Board::makeMove(Move* n_move) {
     this->curr_turn_player = curr_turn_player == 'X' ? 'O' : 'X';
 
     this->updateXOtileCount();
-    this->calculateBoardMoves(this->curr_turn_player);
+    this->allowed_moves = this->calculateBoardMoves(this->curr_turn_player);
 }
 
 char Board::getCurrTurnPlayer() {

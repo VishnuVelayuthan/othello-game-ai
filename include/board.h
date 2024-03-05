@@ -15,7 +15,7 @@ struct MovePointerDefEqual{
 
 class Board {
 public:
-    static int BOARD_SIZE;
+    static constexpr int BOARD_SIZE = 12;
 
     Board(std::string file_name);
     Board();
@@ -23,6 +23,7 @@ public:
     ~Board(); 
 
     char getCurrTurnPlayer();
+    Tile*** getGameBoard() {return this->g_board;};
     double getNumXTiles() {return this->n_x_tiles;};
     double getNumOTiles() {return this->n_o_tiles;};
 
@@ -30,6 +31,7 @@ public:
     
     Board* copyBoard();
     void makeMove(Move* n_move);
+    std::unordered_set<Move*, std::hash<Move*>, MovePointerDefEqual>* calculateBoardMoves(char player);
 
     std::string toString();
 
@@ -43,7 +45,6 @@ private:
     int n_allowed_moves;
     std::unordered_set<Move*, std::hash<Move*>, MovePointerDefEqual>* allowed_moves;
 
-    void calculateBoardMoves(char player);
     void updateXOtileCount();
 };
 

@@ -14,7 +14,7 @@ int main() {
     cout << "Initial Board State: " << endl;
     cout << board->toString() << endl;
 
-    Move* opt_move = minimaxSearch(board, 1);
+    Move* opt_move = minimaxAlphaBetaSearch(board, 1);
 
     Board* move_board = board->copyBoard();
     move_board->makeMove(opt_move);
