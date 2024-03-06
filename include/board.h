@@ -16,6 +16,7 @@ struct MovePointerDefEqual{
 class Board {
 public:
     static constexpr int BOARD_SIZE = 12;
+    static constexpr int N_STARTING_PIECES = 8;
 
     Board(std::string file_name);
     Board();
@@ -26,6 +27,7 @@ public:
     Tile*** getGameBoard() {return this->g_board;};
     double getNumXTiles() {return this->n_x_tiles;};
     double getNumOTiles() {return this->n_o_tiles;};
+    int moveCount() {return n_x_tiles + n_o_tiles + 1 - N_STARTING_PIECES;};
 
     std::unordered_set<Move*, std::hash<Move*>, MovePointerDefEqual>* getAllowedMoves() {return this->allowed_moves;};
     

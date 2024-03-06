@@ -5,6 +5,7 @@
 
 class GamePartition {
 public:
+    static constexpr NUM_GAME_PARTITIONS = 10;
     GamePartition();
     ~GamePartition();
 

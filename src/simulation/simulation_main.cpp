@@ -1,7 +1,9 @@
-#include "../../include/openai/openai.hpp"
 #include "../../include/board.h"
 #include "../../include/move.h"
-#include ".././include/openai/nlohmann/json.hpp"
+#include "../../include/openai/openai.hpp"
+#include "../../include/openai/nlohmann/json.hpp"
+#include "../../include/simulation/snapshots.h"
+#include 
 
 #include <iostream>
 #include <string>
@@ -12,42 +14,27 @@ int main() {
 
     openai::start(); 
 
-    Board* board = new Board("input-files/01-test1.txt");
-    cout << "Initial Board State: " << endl;
-    cout << board->toString() << endl;
+    int num_games = 100;
+    int periodic_parition_store = 10;
 
+    Player p1 = new OpenAIPlayer();
+    Player p2 = new OpenAIPlayer();
 
-    string prompt = "Think step by step. ";
-    prompt = "You are a grandmaster Othello player playing a variation of the standard game. ";
-    prompt += "Instead of a 8x8 board, it's a 12x12 board with rows and cols labeled 0-12. ";
-    prompt += "Your job is given a board, legal moves and what player, make the most accurate move. ";
-    prompt += "Remember, you must try and get stable disks, think critically about future moves, and ";
-    prompt += "maximize your chance of victory. ";
+    Snapshots* curr_game_data;
+    GamePartition* game_partitions;
 
-    prompt += "Here is .the board: \u000A" + board->toString();
-    prompt += "Here are your legal moves: " + board->allowedMovesToString();
-    prompt += "It's " + string(1, board->getCurrTurnPlayer()) + " to play. All you return is (row, col)";
- 
-    nlohmann::json j = {
-        {"model", "gpt-4"},
-        {"messages", nlohmann::json::array({
-            {{"role", "user"}, {"content", prompt}}
-        })},
-        {"temperature", 0.7}
-    };
+    for (int i = 0; i < num_games; i++) {
 
-    string json_str = j.dump();
+        if (i % 2 == 0)
+            curr_game_data = playGame(p1, p2);
+        else 
+            curr_game_data = playGame(p1, p2);
 
-    auto jsonObject = nlohmann::json::parse(json_str);
+        saveGameData(curr_game_data);
+        updatePartitionData(curr_game_data);
 
-    auto& openai = openai::instance();
-    auto completion = openai::_detail::CategoryChat(openai).create(jsonObject); // Using user-defined (raw) string literals
+        if (i + 1 % periodic_parition_store == 0) 
+            savePartitionData(game_partitions);
+    }
 
-    string move_str = completion["choices"][0]["message"]["content"];
-
-    cout << move_str << endl;
-
-    Move* new_m = board->findMove(move_str);
-
-    cout << new_m->getIrow() << " " << new_m->getIcol() << endl;
 }

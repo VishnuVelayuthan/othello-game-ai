@@ -12,6 +12,10 @@ Move* MinimaxPlayer::play(Board* board) {
 }
 
 Move* OpenAIPlayer::play(Board* board) { 
+
+    if (*(board->getAllowedMoves())->size() == 0) 
+        return nullptr;
+
     string prompt = "Think step by step. ";
     prompt = "You are a grandmaster Othello player playing a variation of the standard game. ";
     prompt += "Instead of a 8x8 board, it's a 12x12 board with rows and cols labeled 0-12. ";
@@ -21,6 +25,7 @@ Move* OpenAIPlayer::play(Board* board) {
     
 
     prompt += "Here is .the board: \u000A" + board->toString();
+    prompt += "It's move: " to_string(board->moveCount()); + "\u000A";
     prompt += "Here are your legal moves: " + board->allowedMovesToString();
     prompt += "It's " + string(1, board->getCurrTurnPlayer()) + " to play. All you return is (row, col)";
  
@@ -41,7 +46,5 @@ Move* OpenAIPlayer::play(Board* board) {
 
     string move_str = completion["choices"][0]["message"]["content"];
 
-    return board->findMove(move_str);
-
-    
+    return board->findMove(move_str);    
 }
