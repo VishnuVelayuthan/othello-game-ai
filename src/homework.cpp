@@ -6,6 +6,8 @@
 #include "../include/check_board_utility.h"
 #include "../include/eval_board.h"
 
+#include "../include/openai/openai.hpp"
+
 using namespace std;
 
 int main() {
