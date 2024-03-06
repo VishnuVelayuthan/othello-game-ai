@@ -32,8 +32,10 @@ public:
     Board* copyBoard();
     void makeMove(Move* n_move);
     std::unordered_set<Move*, std::hash<Move*>, MovePointerDefEqual>* calculateBoardMoves(char player);
+    Move* findMove(std::string move_str);
 
     std::string toString();
+    std::string allowedMovesToString();
 
 private:
     Tile*** g_board;

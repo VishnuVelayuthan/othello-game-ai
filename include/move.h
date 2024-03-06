@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <vector>
 #include <functional>
+#include <string>
 
 enum class FlipType : short {
     UP = 0, 
@@ -49,6 +50,11 @@ public:
     inline char getPlayer() {return this->m_player;};
     inline const std::vector<FlipType>& getFlipTypes() {return this->flipTypes;};
 
+    inline const std::string toString() {
+        return "(" + std::to_string(row) + "," + std::to_string(col) + ")";
+    }
+
+    inline const bool isMove(int r, int c) {return r == row && c == col;};
 
 private:
     int row;

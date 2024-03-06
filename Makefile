@@ -30,7 +30,7 @@ build/minimax.o: $(SRCDIR)/minimax.cpp $(INCLUDEDIR)/eval_board.h
 build/minimax_ab.o: $(SRCDIR)/minimax_ab.cpp $(INCLUDEDIR)/eval_board.h  
 	$(CC) $(CFLAGS) -c $< -o $@
 
-simulation: build/simulation_main.o
+simulation: build/simulation_main.o build/board.o build/check_board_utility.o build/flip_board_utility.o 
 	$(CC) $(CFLAGS) -o main-othello-simulation $^ -lcurl
 
 build/simulation_main.o: $(SRCDIR)/simulation/simulation_main.cpp 

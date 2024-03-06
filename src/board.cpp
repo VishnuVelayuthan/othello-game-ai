@@ -8,6 +8,7 @@
 #include <string>
 #include <stdexcept>
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 
@@ -225,6 +226,23 @@ void Board::makeMove(Move* n_move) {
     this->allowed_moves = this->calculateBoardMoves(this->curr_turn_player);
 }
 
+Move* Board::findMove(string move_str) {
+    int r; 
+    int c; 
+
+    move_str.erase(remove(move_str.begin(), move_str.end(), '('), move_str.end());
+    move_str.erase(remove(move_str.begin(), move_str.end(), ')'), move_str.end());
+    std::istringstream iss(move_str);
+    char delimiter; 
+    iss >> r >> delimiter >> c;
+
+    for (Move* move : *allowed_moves) 
+        if (move->isMove(r,c))
+            return move;
+
+    return nullptr;
+}
+
 char Board::getCurrTurnPlayer() {
     return this->curr_turn_player;
 }
@@ -241,8 +259,15 @@ string Board::toString() {
             board_string += curr_tile->getPlayerOcc();
         }
 
-        board_string += "\n";
+        board_string += "\u000A";
     }
 
     return board_string;
+}
+
+string Board::allowedMovesToString() {
+    string m_str = "";
+    for (Move* move : *allowed_moves) 
+        m_str += move->toString() + " ";
+    return m_str;
 }
