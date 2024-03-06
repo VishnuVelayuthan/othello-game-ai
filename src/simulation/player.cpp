@@ -30,7 +30,7 @@ Move* OpenAIPlayer::play(Board* board) {
     prompt += "Here are your legal moves: " + board->allowedMovesToString();
     prompt += "It's " + string(1, board->getCurrTurnPlayer()) + " to play. ";
     prompt += "Remember, DON'T GIVE UP CORNERS. AND TAKE CORNERS. NOR PLAY IN THE ADJACENT CORNER SQUARES UNLESS STRATEGICALLY. ";
-    prompt += "All you return is (row, col). Nothing more.";
+    prompt += "All you return is (row, col). Nothing more. No text no nothing. Just the (row, col)";
  
     nlohmann::json j = {
         {"model", "gpt-4"},

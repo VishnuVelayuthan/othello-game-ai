@@ -22,12 +22,14 @@ Snapshots* playGame(Player* x, Player* o, bool is_record_o) {
     int completed_move = 0;
     int x_completed_move = 0;
     int o_completed_move = 0;
+    int pass_over = 0;
     Move* curr_move;
     while (game_board->getNumOTiles() + game_board->getNumOTiles() != Board::BOARD_SIZE * Board::BOARD_SIZE) {
 
         // first o plays
         curr_move = o->play(game_board);
         if (curr_move != nullptr) {
+            pass_over = 0;
             game_data->addMove(curr_move);
             cout << "Valid moves are: " << game_board->allowedMovesToString() << endl;
             game_board->makeMove(curr_move);
@@ -37,53 +39,42 @@ Snapshots* playGame(Player* x, Player* o, bool is_record_o) {
             cout << game_board->toString();
             cout << "------------------------" << endl;
         }
+        else {
+            pass_over++;
+            cout << "  Passover incremented" << endl;
+        }
 
         if (completed_move % MOVES_PER_SNAP == is_record_o && completed_move != is_record_o)
             game_data->add(completed_move / MOVES_PER_SNAP, game_board, x_completed_move, o_completed_move);
 
-        if (completed_move == MAX_MOVES)
+        if (completed_move == MAX_MOVES || pass_over >= 2)
             break;
 
         // second x plays
         curr_move = x->play(game_board);
         if (curr_move != nullptr) {
+            pass_over = 0;
             game_data->addMove(curr_move);
-            cout << "Valid moves are: " << game_board->allowedMovesToString() << endl;
             game_board->makeMove(curr_move);
             completed_move++;    
             x_completed_move++;
-            cout << "Played: " << (game_data->getLatestMove())->toString() << endl;
             cout << game_board->toString();
-            cout << "------------------------" << endl;
+        }
+        else {
+            pass_over++;
+            cout << "  Passover incremented" << endl;
+            
         }
 
         if (completed_move % MOVES_PER_SNAP == is_record_o && completed_move != is_record_o)
             game_data->add(completed_move / MOVES_PER_SNAP, game_board, x_completed_move, o_completed_move);
 
-        if (completed_move == MAX_MOVES)
-            break;
-
-        // second x plays
-        curr_move = x->play(game_board);
-        if (curr_move) {
-            game_data->addMove(curr_move);
-            game_board->makeMove(curr_move);
-            completed_move++;    
-            x_completed_move++;
-            cout << game_board->toString();
-            cout << game_board->toString();
-
-        }
-
-        if (completed_move % MOVES_PER_SNAP == is_record_o && is_record_o != is_record_o)
-            game_data->add(completed_move / MOVES_PER_SNAP, game_board, x_completed_move, o_completed_move);
-
-        if (completed_move == MAX_MOVES)
+        if (completed_move == MAX_MOVES || pass_over == 2)
             break;
         
     }
  
-    game_data->add(GamePartition::NUM_GAME_PARTITIONS, game_board, x_completed_move, o_completed_move);
+    game_data->add(completed_move / GamePartition::NUM_GAME_PARTITIONS + 1, game_board, x_completed_move, o_completed_move);
 
     int n_x_ti = game_board->getNumXTiles();
     int n_o_ti = game_board->getNumOTiles();

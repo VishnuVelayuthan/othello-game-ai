@@ -37,13 +37,13 @@ int main() {
             curr_game_data = playGame(p1, p2, true);
 
         // saveGameData(curr_game_data);
-        for (int i = 0; i < Board::BOARD_SIZE; i++) {
+        for (int i = 0; i < GamePartition::NUM_GAME_PARTITIONS; i++) {
             game_partitions[i]->update((*curr_game_data)[i], curr_game_data->getWinner());
-
         }
 
         // if (i + 1 % periodic_parition_store == 0) 
             // savePartitionData(game_partitions);
     }
 
+    GamePartition* test1 = game_partitions[3];
 }

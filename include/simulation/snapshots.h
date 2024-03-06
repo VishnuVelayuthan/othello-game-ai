@@ -24,7 +24,7 @@ public:
     };
 
     void add(int location, Board* board, int x_moves, int o_moves) {
-        if (snapshots[location-1])
+        if (snapshots[location-1] != nullptr)
             return;
 
         snapshots[location-1] = new Snapshot(board, x_moves, o_moves, location == Board::BOARD_SIZE);

@@ -6,22 +6,23 @@
 #include "../include/check_board_utility.h"
 #include "../include/eval_board.h"
 
-#include "../include/openai/openai.hpp"
 
 using namespace std;
 
 int main() {
 
-    Board* board = new Board("input-files/02-test2.txt");
+    Board* board = new Board("input-files/04-debug-end.txt");
     cout << "Initial Board State: " << endl;
     cout << board->toString() << endl;
 
-    Move* opt_move = minimaxAlphaBetaSearch(board, 1);
+    // Move* opt_move = minimaxAlphaBetaSearch(board, 1);
+
+    cout << board->allowedMovesToString() << endl;
 
     Board* move_board = board->copyBoard();
-    move_board->makeMove(opt_move);
-    cout << "Move: " << opt_move->getIrow() << " " << opt_move->getIcol() << endl;
-    cout << move_board->toString() << endl;
+    // move_board->makeMove(opt_move);
+    // cout << "Move: " << opt_move->getIrow() << " " << opt_move->getIcol() << endl;
+    // cout << move_board->toString() << endl;
     
 
     
