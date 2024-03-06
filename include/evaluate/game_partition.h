@@ -11,6 +11,7 @@
 #include <unordered_map>
 #include <tuple>
 #include <functional>
+#include <iostream>
 
 using namespace std;
 
@@ -92,6 +93,12 @@ public:
                 }
             }
         }
+
+        cout << "---------------------------------" << endl;
+        for (auto it = tile_relation_weights.begin(); it != tile_relation_weights.end(); ++it) 
+             cout << "Key: " << get<0>(it->first) << get<1>(it->first) << get<2>(it->first) << "  Value: " << it->second << endl;
+
+
     };
 
 private:

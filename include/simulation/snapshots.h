@@ -42,6 +42,8 @@ public:
         moves.push_back(a_m);
     };
 
+    Move* getLatestMove() {return this->moves.at(moves.size()-1);};
+
 
 private:
     Snapshot** snapshots;
