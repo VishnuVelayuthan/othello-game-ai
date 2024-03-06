@@ -25,7 +25,9 @@ int main() {
     Player* p2 = new OpenAIPlayer();
 
     Snapshots* curr_game_data;
-    GamePartition* game_partitions;
+    GamePartition** game_partitions = new GamePartition*[Board::BOARD_SIZE];
+    for (int i = 0; i < Board::BOARD_SIZE; i++) 
+        game_partitions[i] = new GamePartition();
 
     for (int i = 0; i < num_games; i++) {
 
@@ -35,7 +37,10 @@ int main() {
             curr_game_data = playGame(p1, p2, true);
 
         // saveGameData(curr_game_data);
-        // updatePartitionData(curr_game_data);
+        for (int i = 0; i < Board::BOARD_SIZE; i++) {
+            game_partitions[i]->update((*curr_game_data)[i], curr_game_data->getWinner());
+
+        }
 
         // if (i + 1 % periodic_parition_store == 0) 
             // savePartitionData(game_partitions);

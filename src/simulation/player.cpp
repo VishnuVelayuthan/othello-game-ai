@@ -21,13 +21,16 @@ Move* OpenAIPlayer::play(Board* board) {
     prompt += "Instead of a 8x8 board, it's a 12x12 board with rows and cols labeled 0-12. ";
     prompt += "Your job is given a board, legal moves and what player, make the most accurate move. ";
     prompt += "Remember, you must try and get stable disks, think critically about future moves, and ";
-    prompt += "maximize your chance of victory. ";
+    prompt += "maximize your chance of victory. Do not let it be a draw. You cannot end up on two seperate islands. ";
+    prompt += "You should try and take the corners and not give up the corners cause those are stable disks. Employ a ";
+    prompt += "strategy of evaporation in the first phase of the game. Any opportunity to take corners, take.";
     
 
-    prompt += "Here is .the board: \u000A" + board->toString();
+    prompt += "Here is the board: \u000A" + board->toString();
     prompt += "It's move: " + to_string(board->moveCount()); + "\u000A";
     prompt += "Here are your legal moves: " + board->allowedMovesToString();
-    prompt += "It's " + string(1, board->getCurrTurnPlayer()) + " to play. All you return is (row, col)";
+    prompt += "It's " + string(1, board->getCurrTurnPlayer()) + " to play. All you return is (row, col) and a one "; 
+    prompt += "sentence summary on the next line why you played that move.";
  
     nlohmann::json j = {
         {"model", "gpt-4"},

@@ -223,6 +223,13 @@ void Board::makeMove(Move* n_move) {
     this->curr_turn_player = curr_turn_player == 'X' ? 'O' : 'X';
 
     this->updateXOtileCount();
+    
+    // rewmove late 
+    for (Move* move : *allowed_moves) 
+        delete move;
+    allowed_moves->clear();
+    delete allowed_moves;
+
     this->allowed_moves = this->calculateBoardMoves(this->curr_turn_player);
 }
 

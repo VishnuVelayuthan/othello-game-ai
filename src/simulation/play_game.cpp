@@ -3,6 +3,8 @@
 #include "../../include/simulation/simulation.h"
 #include "../../include/evaluate/game_partition.h"
 
+#include <unistd.h>
+
 using namespace std;
 
 Snapshots* playGame(Player* x, Player* o, bool is_record_o) {
@@ -47,6 +49,7 @@ Snapshots* playGame(Player* x, Player* o, bool is_record_o) {
             x_completed_move++;
             cout << "Played: " << curr_move->toString() << endl;
             cout << game_board->toString();
+
         }
 
         if (completed_move % MOVES_PER_SNAP == is_record_o && is_record_o != is_record_o)
@@ -66,6 +69,8 @@ Snapshots* playGame(Player* x, Player* o, bool is_record_o) {
         game_data->setWinner('D');
     else 
         game_data->setWinner(n_o_ti > n_x_ti ? 'O' : 'X');
+
+    cout << "Winner: " << (n_o_ti > n_x_ti ? 'O' : 'X') << endl;
 
     delete game_board;
     return game_data;

@@ -4,6 +4,7 @@
 #include "../board.h"
 
 #include <unordered_set>
+#include <iostream>
 
 class Snapshot {
 public:
@@ -25,10 +26,23 @@ public:
         }
 
         if (curr_player_turn == 'X') {
-            n_x_lm = (g_board->getAllowedMoves())->size();
+            std::unordered_set<Move*, std::hash<Move*>, MovePointerDefEqual>* a_m = g_board->getAllowedMoves();
+            if (!a_m) {
+                n_x_lm = 0;
+                std::cout << "Buggin" << std::endl;
+            }
+            else
+                n_x_lm = a_m->size();
         }
         else {
-            n_o_lm = (g_board->getAllowedMoves())->size();
+            std::unordered_set<Move*, std::hash<Move*>, MovePointerDefEqual>* a_m = g_board->getAllowedMoves();
+            if (!a_m) {
+                n_o_lm = 0;
+                std::cout << "Buggin" << std::endl;
+
+            }
+            else
+                n_o_lm = a_m->size();
         }
     };
 

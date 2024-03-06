@@ -31,6 +31,11 @@ public:
     };
     
     void setWinner(char winner) {this->winner = winner;};
+    char getWinner() {return this->winner;};
+
+    Snapshot* operator[] (int i) {
+        return snapshots[i];
+    };
 
     void addMove(Move* move) {
         Move* a_m = new Move(move);
