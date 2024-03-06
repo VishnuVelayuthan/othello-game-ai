@@ -2,7 +2,6 @@
 #define SNAPSHOT_H
 
 #include "../board.h"
-#include "../evaluate/game_partition.h"
 
 #include <unordered_set>
 
@@ -26,15 +25,15 @@ public:
         }
 
         if (curr_player_turn == 'X') {
-            n_x_lm = *(g_board->getAllowedMoves())->size();
+            n_x_lm = (g_board->getAllowedMoves())->size();
         }
-        else  {
-            n_o_lm = *(g_board->getAllowedMoves())->size();
+        else {
+            n_o_lm = (g_board->getAllowedMoves())->size();
         }
     };
 
 
-    friend void GamePartition::update(Snapshot* snapshot, char winner);
+    Board* getBoard() {return this->g_board;};
 private:
     Board* g_board;
 

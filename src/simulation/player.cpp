@@ -1,19 +1,19 @@
 #include "../../include/simulation/player.h" 
 
 #include "../../include/eval_board.h"
-#include "openai.hpp"
+#include "../../include/openai/openai.hpp"
 
 #include <string>
 
 using namespace std;
 
-Move* MinimaxPlayer::play(Board* board) {
-    return minimaxAlphaBetaSearch(board, PLY_COUNT);
-}
+// Move* MinimaxPlayer::play(Board* board) {
+//     return minimaxAlphaBetaSearch(board, PLY_COUNT);
+// }
 
 Move* OpenAIPlayer::play(Board* board) { 
 
-    if (*(board->getAllowedMoves())->size() == 0) 
+    if ((board->getAllowedMoves())->size() == 0) 
         return nullptr;
 
     string prompt = "Think step by step. ";
@@ -25,7 +25,7 @@ Move* OpenAIPlayer::play(Board* board) {
     
 
     prompt += "Here is .the board: \u000A" + board->toString();
-    prompt += "It's move: " to_string(board->moveCount()); + "\u000A";
+    prompt += "It's move: " + to_string(board->moveCount()); + "\u000A";
     prompt += "Here are your legal moves: " + board->allowedMovesToString();
     prompt += "It's " + string(1, board->getCurrTurnPlayer()) + " to play. All you return is (row, col)";
  

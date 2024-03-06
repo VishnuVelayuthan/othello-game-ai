@@ -1,8 +1,11 @@
-#include "../../include/simulation/simulation.h"
 #include "../../include/board.h"
 
+#include "../../include/simulation/simulation.h"
+#include "../../include/evaluate/game_partition.h"
 
-SnapShots* playGame(Player* x, Player* o, bool is_record_o) {
+using namespace std;
+
+Snapshots* playGame(Player* x, Player* o, bool is_record_o) {
 
     x->setPlayerSymbol('X');
     o->setPlayerSymbol('O');
@@ -12,7 +15,7 @@ SnapShots* playGame(Player* x, Player* o, bool is_record_o) {
     int MAX_MOVES = Board::BOARD_SIZE * Board::BOARD_SIZE - Board::N_STARTING_PIECES;
     int MOVES_PER_SNAP = MAX_MOVES / (GamePartition::NUM_GAME_PARTITIONS);
 
-    SnapShots* game_data = new Snapshots();
+    Snapshots* game_data = new Snapshots();
 
     int completed_move = 0;
     int x_completed_move = 0;
@@ -26,10 +29,12 @@ SnapShots* playGame(Player* x, Player* o, bool is_record_o) {
             game_board->makeMove(curr_move);
             completed_move++;    
             o_completed_move++;
+            cout << "Played: " << curr_move->toString() << endl;
+            cout << game_board->toString();
         }
 
         if (completed_move % MOVES_PER_SNAP == is_record_o && completed_move != is_record_o)
-            game_data.add(completed_move / MOVES_PER_SNAP, game_board);
+            game_data->add(completed_move / MOVES_PER_SNAP, game_board, x_completed_move, o_completed_move);
 
         if (completed_move == MAX_MOVES)
             break;
@@ -40,20 +45,22 @@ SnapShots* playGame(Player* x, Player* o, bool is_record_o) {
             game_board->makeMove(curr_move);
             completed_move++;    
             x_completed_move++;
+            cout << "Played: " << curr_move->toString() << endl;
+            cout << game_board->toString();
         }
 
         if (completed_move % MOVES_PER_SNAP == is_record_o && is_record_o != is_record_o)
-            game_data->add(completed_move / MOVES_PER_SNAP, game_board);
+            game_data->add(completed_move / MOVES_PER_SNAP, game_board, x_completed_move, o_completed_move);
 
         if (completed_move == MAX_MOVES)
             break;
         
     }
  
-    game_data->add(NUM_GAME_PARTITIONS, game_board);
+    game_data->add(GamePartition::NUM_GAME_PARTITIONS, game_board, x_completed_move, o_completed_move);
 
-    int n_x_ti = board->getNumXTiles();
-    int n_o_ti = board->getNumOTiles();
+    int n_x_ti = game_board->getNumXTiles();
+    int n_o_ti = game_board->getNumOTiles();
 
     if (n_x_ti == n_o_ti)
         game_data->setWinner('D');

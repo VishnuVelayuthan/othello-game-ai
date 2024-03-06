@@ -26,8 +26,8 @@ public:
     };
 
     Move(Move* move) : row(move->row), col(move->col), m_player(move->m_player){
-        for (int i = 0; i < move->flipTypes; i++)
-            this->flipTypes.add(move->flipTypes[i]);
+        for (int i = 0; i < move->flipTypes.size(); i++)
+            this->flipTypes.push_back(move->flipTypes[i]);
     };
     
     friend bool operator==(const Move& lhs, const Move& rhs) {

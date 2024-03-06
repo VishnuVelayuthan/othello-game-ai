@@ -6,7 +6,7 @@
 
 #include <string>
 
-Snapshots* playGame(Player* x, Player* o);
+Snapshots* playGame(Player* x, Player* o, bool is_record_o);
 
 void serializeSnapshots(Snapshots* game_data, std::string name);
 

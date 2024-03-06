@@ -2,16 +2,16 @@
 #define PLAYER_H 
 
 #include "../board.h"
-#include "openai.hpp"
+#include "../openai/openai.hpp"
 
 class Player {
 public:
     Player(bool is_ai) : is_ai(is_ai) {};
 
-    virtual Move* play(Board* board) = 0;
+    virtual Move* play(Board* board) {return nullptr;};
 
     void setPlayerSymbol(char player) {this->player_sym = player;};
-    void getPlayerSymbol() {return player_sym;};
+    char getPlayerSymbol() {return player_sym;};
 protected:
     char player_sym;
     bool is_ai;
@@ -19,7 +19,7 @@ protected:
 };
 
 
-// class MinimaxPlayer : Player {
+// class MinimaxPlayer : public Player {
 // public: 
 //     MinimaxPlayer(char player_sym) : Player(player_sym, false){};
 //
@@ -29,13 +29,13 @@ protected:
 //     static constexpr int PLY_COUNT = 8;
 // };
 
-class OpenAIPlayer: Player {
+class OpenAIPlayer: public Player {
 public:
     OpenAIPlayer() : Player(true) {
         openai::start();
     };
 
-    inline Move* play(Board* board) override;
+    Move* play(Board* board) override;
 };
 
 

@@ -27,20 +27,20 @@ public:
         if (snapshots[location-1])
             return;
 
-        snapshots[location-1] = new Snapshot(board, location == Board::BOARD_SIZE);
+        snapshots[location-1] = new Snapshot(board, x_moves, o_moves, location == Board::BOARD_SIZE);
     };
     
     void setWinner(char winner) {this->winner = winner;};
 
     void addMove(Move* move) {
         Move* a_m = new Move(move);
-        moves.add(a_m);
+        moves.push_back(a_m);
     };
 
 
 private:
     Snapshot** snapshots;
-    char winnner;
+    char winner;
 
     std::vector<Move*> moves;
 

@@ -2,17 +2,32 @@
 #define GAME_PARTITION_H 
 
 #include "../board.h"
-#include "./tile.h"
+#include "../tile.h"
+
+#include "../simulation/snapshot.h"
+
 
 #include <vector>
 #include <unordered_map>
 #include <tuple>
+#include <functional>
 
 using namespace std;
 
+struct hash_tuple {
+    template <class T>
+    std::size_t operator () (const T &tuple) const {
+        auto hash1 = std::hash<int>{}(std::get<0>(tuple));
+        auto hash2 = std::hash<int>{}(std::get<1>(tuple));
+        auto hash3 = std::hash<int>{}(std::get<2>(tuple));
+        auto hash4 = std::hash<int>{}(std::get<3>(tuple));
+        return hash1 ^ (hash2 << 1) ^ (hash3 << 2) ^ (hash4 << 3); // Simple hash combination
+    }
+};
+
 class GamePartition {
 public:
-    static constexpr NUM_GAME_PARTITIONS = 10;
+    static constexpr int NUM_GAME_PARTITIONS = 10;
     GamePartition(){
         tile_weights = new double*[Board::BOARD_SIZE];
         for (int i = 0; i < Board::BOARD_SIZE; i++) {
@@ -28,7 +43,7 @@ public:
     };
 
     void update(Snapshot* snapshot, char winner) {
-        Board* g_board = snapshot->g_board;
+        Board* g_board = snapshot->getBoard();
 
         Tile*** tile_board = g_board->getGameBoard();
         
@@ -65,12 +80,13 @@ public:
                         if (!lower_tile->isOccupied())
                             continue;
                         else if (lower_tile->getPlayerOcc() == upper_tile->getPlayerOcc()) {
-                            tuple<int, int, int, int> key = make_tuple<int, int, int, int>(i, j, h, k);
+                            tuple<int, int, int, int> key = std::make_tuple(i, j, h, k);
                             if (winner == 'D')
                                 tile_relation_weights[key] = tile_relation_weights[key] + 0.5;
-                            else 
-                                tile_relation_weights[key] = tile_relation_weights[key] + 
-                                    lower_tile == winner ? 1 : -1;
+                            else {
+                                int to_add = lower_tile->getPlayerOcc() == winner ? 1 : -1; 
+                                tile_relation_weights[key] = tile_relation_weights[key] + to_add;
+                            }
                         }
                     }
                 }
@@ -80,7 +96,7 @@ public:
 
 private:
     double** tile_weights;
-    unordered_map<tuple<int, int, int, int>, double> tile_relation_weights;
+    unordered_map<tuple<int, int, int, int>, double, hash_tuple> tile_relation_weights;
 
     double num_disk_parity;
     double t_disk_parity_dev;
