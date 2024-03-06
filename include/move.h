@@ -24,6 +24,11 @@ public:
     {
         flipTypes.push_back(iniType);
     };
+
+    Move(Move* move) : row(move->row), col(move->col), m_player(move->m_player){
+        for (int i = 0; i < move->flipTypes; i++)
+            this->flipTypes.add(move->flipTypes[i]);
+    };
     
     friend bool operator==(const Move& lhs, const Move& rhs) {
         return lhs.row == rhs.row && lhs.col == rhs.col && lhs.m_player == rhs.m_player;
