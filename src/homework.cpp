@@ -11,13 +11,19 @@ using namespace std;
 
 int main() {
 
-    Board* board = new Board("input-files/04-debug-end.txt");
+    Board* board = new Board("input-files/05-debug-end.txt");
     cout << "Initial Board State: " << endl;
     cout << board->toString() << endl;
 
     // Move* opt_move = minimaxAlphaBetaSearch(board, 1);
 
     cout << board->allowedMovesToString() << endl;
+    
+    unordered_set<Move*, std::hash<Move*>, MovePointerDefEqual>* allowed_moves = board->getAllowedMoves();
+    for (Move* move : *allowed_moves) 
+        cout << (move->getFlipTypes()).size() << endl;
+
+
 
     Board* move_board = board->copyBoard();
     // move_board->makeMove(opt_move);

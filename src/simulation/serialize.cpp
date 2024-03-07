@@ -36,8 +36,20 @@ void csvifySnapshots(Snapshots* game_data) {
 
 
 void serializeSnapshots(Snapshots* game_data, int game_num) {
+    ofstream json_file = ofstream("data/serialized-snapshots/game-snapshot-" + to_string(game_num) + ".json", ios::app);
+    json_file << (game_data->toJson()).dump(4);
+    json_file.close();
+}
 
-    ofstream json_file = ofstream("data/serialized-snapshots/game-snapshot-" + to_string(game_num) + ".json");
+void serializeGamePartitions(GamePartition** g_p, int game_num) {
+    ofstream json_file = ofstream("data/serialized-game-partitions/game-partition" + to_string(game_num) + ".json", ios::app);
+
+    nlohmann::json jsonArray = nlohmann::json::array();
+    for (int i = 0; i < GamePartition::NUM_GAME_PARTITIONS; i++)
+        jsonArray.push_back(g_p[i]->toJson());
+
+    json_file << jsonArray.dump(4);
+    json_file.close();
 }
 
 

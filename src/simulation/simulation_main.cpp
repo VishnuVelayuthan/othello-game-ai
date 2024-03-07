@@ -18,6 +18,7 @@ int main() {
 
     openai::start(); 
 
+    int PRE_GAME_NUM = 1; // change every run
     int num_games = 1;
     int periodic_parition_store = 10;
 
@@ -42,6 +43,8 @@ int main() {
         }
 
         csvifySnapshots(curr_game_data);
+        serializeSnapshots(curr_game_data, PRE_GAME_NUM + i);
+        serializeGamePartitions(game_partitions, PRE_GAME_NUM + i);
 
     }
 
