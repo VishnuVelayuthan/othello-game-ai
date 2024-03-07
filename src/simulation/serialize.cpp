@@ -17,8 +17,12 @@ void csvifySnapshots(Snapshots* game_data) {
     Snapshot* curr_snap;
     ofstream curr_csv;
     for (int i = 0; i < GamePartition::NUM_GAME_PARTITIONS; i++) {
+
         curr_csv = ofstream("data/csv-snapshots/snapshot-" + to_string(i) + ".csv", ios::app);
         curr_snap = (*game_data)[i];
+
+        if (curr_snap == nullptr || !curr_snap)
+            continue;
 
         curr_csv << game_data->getWinner() << ", " << 
                     curr_snap->curr_player_turn << ", ";
@@ -97,6 +101,18 @@ json Snapshot::toJson() {
     return j;
 }
 
+GamePartition** deserializeGamePartitionArr(json j) {
+    GamePartition** partitions = new GamePartition*[GamePartition::NUM_GAME_PARTITIONS];
+
+    int i = 0; // not the best code i've written 
+    for (const auto& jPartition : j) {
+        GamePartition* partition = GamePartition::fromJson(jPartition);
+        partitions[i] = partition;
+        i++;
+    }
+
+    return partitions;
+}
 
 
 

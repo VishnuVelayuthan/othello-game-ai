@@ -38,6 +38,10 @@ public:
     void update(Snapshot* snapshot, char winner);
     json toJson() const;
 
+    static GamePartition* fromJson(const nlohmann::json& j);
+    void setTileWeight(int i, int j, double weight);
+
+
 private:
     double** tile_weights;
     unordered_map<tuple<int, int, int, int>, double, hash_tuple> tile_relation_weights;

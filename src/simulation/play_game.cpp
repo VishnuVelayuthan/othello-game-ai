@@ -37,6 +37,7 @@ Snapshots* playGame(Player* x, Player* o, bool is_record_o) {
             completed_move++;    
             o_completed_move++;
 
+            cout << completed_move << " O Played " << endl;
             cout << game_board->toString();
             cout << "------------------------" << endl;
         }
@@ -64,6 +65,7 @@ Snapshots* playGame(Player* x, Player* o, bool is_record_o) {
 
             completed_move++;    
             x_completed_move++;
+            cout << completed_move << " X Played " << endl;
 
             cout << game_board->toString();
             cout << "------------------------" << endl;
@@ -100,6 +102,7 @@ Snapshots* playGame(Player* x, Player* o, bool is_record_o) {
         game_data->setWinner(n_o_ti > n_x_ti ? 'O' : 'X');
 
     cout << "Winner: " << (n_o_ti > n_x_ti ? 'O' : 'X') << endl;
+    cout << "--------------------------------------------" << endl;
 
     delete game_board;
     return game_data;

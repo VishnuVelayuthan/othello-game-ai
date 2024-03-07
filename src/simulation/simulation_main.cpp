@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include <string>
+#include <fstream>
 
 using namespace std;
 
@@ -18,15 +19,21 @@ int main() {
 
     openai::start(); 
 
-    int PRE_GAME_NUM = 3; // change every run
-    int num_games = 1;
-    int periodic_parition_store = 10;
+    int PRE_GAME_NUM = 39; // change every run
+    int num_games = 40;
+    int periodic_parition_store = 5;
+
+    nlohmann::json j;
+    
+    std::ifstream file("data/serialized-game-partitions/game-partition49.json");
+    file >> j;
 
     Player* p1 = new OpenAIPlayer();
     Player* p2 = new OpenAIPlayer();
 
+
     Snapshots* curr_game_data;
-    GamePartition** game_partitions = new GamePartition*[Board::BOARD_SIZE];
+    GamePartition** game_partitions = deserializeGamePartitionArr(j);
     for (int i = 0; i < Board::BOARD_SIZE; i++) 
         game_partitions[i] = new GamePartition();
 
@@ -49,9 +56,9 @@ int main() {
 
         csvifySnapshots(curr_game_data);
         serializeSnapshots(curr_game_data, PRE_GAME_NUM + i);
-        serializeGamePartitions(game_partitions, PRE_GAME_NUM + i);
 
+        if (i % periodic_parition_store == 0 && i != 0)
+            serializeGamePartitions(game_partitions, PRE_GAME_NUM + i);
     }
 
-    GamePartition* test1 = game_partitions[3];
 }

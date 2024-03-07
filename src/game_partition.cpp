@@ -1,5 +1,7 @@
 #include "../include/evaluate/game_partition.h"
 
+#include <sstream>
+
 using json = nlohmann::json;
 
 
@@ -53,6 +55,10 @@ json GamePartition::toJson() const {
 };
 
 void GamePartition::update(Snapshot* snapshot, char winner) {
+
+        if (snapshot == nullptr) 
+            return;
+
         Board* g_board = snapshot->getBoard();
 
         Tile*** tile_board = g_board->getGameBoard();
@@ -102,8 +108,43 @@ void GamePartition::update(Snapshot* snapshot, char winner) {
                 }
             }
         }
+    }
 
-        cout << "---------------------------------" << endl;
-        for (auto it = tile_relation_weights.begin(); it != tile_relation_weights.end(); ++it) 
-             cout << "Key: " << get<0>(it->first) << get<1>(it->first) << get<2>(it->first) << "  Value: " << it->second << endl;
-    };
+
+
+GamePartition* GamePartition::fromJson(const nlohmann::json& j) {
+        GamePartition* partition = new GamePartition();
+
+        // Assuming tile_weights is already allocated with fixed dimensions
+        // and you have a method to set each weight, e.g., setTileWeight(x, y, weight)
+        for (int i = 0; i < GamePartition::NUM_GAME_PARTITIONS; ++i) {
+            for (int k = 0; k < GamePartition::NUM_GAME_PARTITIONS; ++k) {
+                partition->setTileWeight(i, k, j["tile_weights"][i][k]);
+            }
+        }
+
+        // Deserialize tile_relation_weights
+        for (const auto& [key, value] : j["tile_relation_weights"].items()) {
+            std::istringstream keyStream(key);
+            std::string segment;
+            std::vector<int> tupleValues;
+
+            while (std::getline(keyStream, segment, ',')) {
+                tupleValues.push_back(std::stoi(segment));
+            }
+
+            std::tuple<int, int, int, int> tupleKey = std::make_tuple(tupleValues[0], tupleValues[1], tupleValues[2], tupleValues[3]);
+            partition->tile_relation_weights[tupleKey] = value;
+        }
+
+        // Deserialize simple variables
+        // partition->num_disk_parity = j["num_disk_parity"];
+        // partition->t_disk_parity_dev = j["t_disk_parity_dev"];
+        // partition->t_legal_move_ratio_mean = j["t_legal_move_ratio_mean"];
+        // partition->t_legal_move_ratio_dev = j["t_legal_move_ratio_dev"];
+        return partition;
+    }
+
+void GamePartition::setTileWeight(int i, int j, double weight) {
+    this->tile_weights[i][j] = weight;
+}

@@ -4,6 +4,7 @@
 #include "../../include/openai/openai.hpp"
 
 #include <string>
+#include <stdexcept>
 
 using namespace std;
 
@@ -11,11 +12,16 @@ using namespace std;
 //     return minimaxAlphaBetaSearch(board, PLY_COUNT);
 // }
 
+
+static auto& openi = openai::instance(); 
+
 Move* OpenAIPlayer::play(Board* board) { 
 
     if ((board->getAllowedMoves())->size() == 0) 
         return nullptr;
 
+    
+    
     string prompt = "Think step by step. ";
     prompt = "You are a grandmaster Othello player playing a variation of the standard game. ";
     prompt += "Instead of a 8x8 board, it's a 12x12 board with rows and cols labeled 0-12. ";
@@ -45,10 +51,20 @@ Move* OpenAIPlayer::play(Board* board) {
     auto jsonObject = nlohmann::json::parse(json_str);
 
     Move* new_m;
-    auto& openai = openai::instance();
-    auto completion = openai::_detail::CategoryChat(openai).create(jsonObject); // Using user-defined (raw) string literals
+    
+    string move_str;
+    while(true) {
+        try {
+            auto completion = openai::_detail::CategoryChat(openi).create(jsonObject); // Using user-defined (raw) string literals
+            move_str = completion["choices"][0]["message"]["content"];
+        }
+        catch (const std::exception& e) {
+            cout << e.what() << endl;
+            continue;
+        }
+        break;
+    }
 
-    string move_str = completion["choices"][0]["message"]["content"];
 
     cout << "  Valid Moves: " << board->allowedMovesToString() << endl;
     cout << "  AI Choice: " << move_str << endl;

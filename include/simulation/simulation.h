@@ -13,5 +13,6 @@ void serializeSnapshots(Snapshots* game_data, int game_num);
 void csvifySnapshots(Snapshots* game_data);
 void serializeGamePartitions(GamePartition** g_p, int game_num);
 
+GamePartition** deserializeGamePartitionArr(json j);
 
 #endif
