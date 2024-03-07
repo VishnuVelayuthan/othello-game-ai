@@ -1,6 +1,7 @@
-
 #ifndef TILE_H 
 #define TILE_H 
+
+#include "./openai/nlohmann/json.hpp"
 
 class Tile{
 public:
@@ -27,6 +28,15 @@ public:
 
     inline bool isOccupied() {return (this->p_occ != '.');};
     inline bool isPlayerOcc(char player) {return this->p_occ == player;};
+
+    inline nlohmann::json toJson() {
+        nlohmann::json j;
+        j["i_row"] = i_row;
+        j["i_col"] = i_col;
+        j["c_col"] = c_col;
+        j["p_occ"] = p_occ;
+        return j;
+    };
 
 private:
     int i_row; // number from 1 - 12

@@ -1,6 +1,8 @@
 #ifndef MOVE_H
 #define MOVE_H
 
+#include "./openai/nlohmann/json.hpp"
+
 #include <cstddef>
 #include <vector>
 #include <functional>
@@ -58,6 +60,14 @@ public:
     inline const std::string toString() {
         return "(" + std::to_string(row) + "," + std::to_string(col) + ")";
     }
+
+    inline nlohmann::json toJson() {
+        nlohmann::json j;
+        j["row"] = row;
+        j["col"] = col;
+        j["m_player"] = m_player;
+        return j; 
+    };
 
     inline const bool isMove(int r, int c) {return r == row && c == col;};
 

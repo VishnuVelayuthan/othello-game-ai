@@ -281,3 +281,30 @@ string Board::allowedMovesToString() {
         m_str += move->toString() + " ";
     return m_str;
 }
+
+
+nlohmann::json Board::toJson() const {
+    nlohmann::json j;
+
+    // Convert board state to JSON
+    nlohmann::json boardJson = nlohmann::json::array();
+    for (int i = 0; i < Board::BOARD_SIZE; ++i) {
+        nlohmann::json rowJson = nlohmann::json::array();
+        for (int j = 0; j < Board::BOARD_SIZE; ++j) {
+            // Assuming Tile has a toJson() method that returns nlohmann::json
+            rowJson.push_back(this->g_board[i][j]->toJson());
+        }
+        boardJson.push_back(rowJson);
+    }
+    j["board"] = boardJson;
+
+    // Serialize other attributes
+    j["curr_turn_player"] = std::string(1, this->curr_turn_player);
+    j["n_x_tiles"] = this->n_x_tiles;
+    j["n_o_tiles"] = this->n_o_tiles;
+
+    // Assuming you have a way to serialize allowed_moves if necessary
+    // This part is omitted for brevity as it depends on the Move class implementation
+
+    return j;
+}

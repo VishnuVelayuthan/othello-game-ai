@@ -3,6 +3,7 @@
 
 #include "./snapshot.h"
 #include "../board.h"
+#include "../openai/nlohmann/json.hpp"
 
 #include <vector>
 
@@ -43,6 +44,8 @@ public:
     };
 
     Move* getLatestMove() {return this->moves.at(moves.size()-1);};
+
+    nlohmann::json toJson() const;
 
 
 private:

@@ -3,6 +3,7 @@
 
 #include "./move.h"
 #include "./tile.h"
+#include "./openai/nlohmann/json.hpp"
 
 #include <string>
 #include <unordered_set>
@@ -38,6 +39,8 @@ public:
 
     std::string toString();
     std::string allowedMovesToString();
+
+    nlohmann::json toJson() const;
 
 private:
     Tile*** g_board;

@@ -9,9 +9,9 @@
 
 Snapshots* playGame(Player* x, Player* o, bool is_record_o);
 
-void serializeSnapshots(Snapshots* game_data, std::string name);
+void serializeSnapshots(Snapshots* game_data, int game_num);
 void csvifySnapshots(Snapshots* game_data);
-void serializeGamePartition(GamePartition* g_p, std::string name);
+void serializeGamePartition(GamePartition* g_p, int game_num);
 
 
 #endif

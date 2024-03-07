@@ -2,6 +2,7 @@
 #define SNAPSHOT_H
 
 #include "../board.h"
+#include "../openai/nlohmann/json.hpp"
 
 #include <unordered_set>
 #include <string>
@@ -47,6 +48,8 @@ public:
     };
 
     Board* getBoard() {return this->g_board;};
+    
+    nlohmann::json toJson();
 
     char curr_player_turn;
 
