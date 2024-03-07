@@ -4,6 +4,7 @@
 #include "../board.h"
 
 #include <unordered_set>
+#include <string>
 #include <iostream>
 
 class Snapshot {
@@ -25,31 +26,27 @@ public:
             return;
         }
 
-        if (curr_player_turn == 'X') {
-            std::unordered_set<Move*, std::hash<Move*>, MovePointerDefEqual>* a_m = g_board->getAllowedMoves();
-            if (!a_m) {
-                n_x_lm = 0;
-                std::cout << "Buggin" << std::endl;
-            }
-            else
-                n_x_lm = a_m->size();
+        std::unordered_set<Move*, std::hash<Move*>, MovePointerDefEqual>* allowed_moves;
+    
+        allowed_moves = g_board->calculateBoardMoves('X');
+        if (allowed_moves == nullptr) {
+            n_x_lm = 0;
+            std::cout << "Buggin" << std::endl;
         }
-        else {
-            std::unordered_set<Move*, std::hash<Move*>, MovePointerDefEqual>* a_m = g_board->getAllowedMoves();
-            if (!a_m) {
-                n_o_lm = 0;
-                std::cout << "Buggin" << std::endl;
+        else
+            n_x_lm = allowed_moves->size();
 
-            }
-            else
-                n_o_lm = a_m->size();
+        allowed_moves = g_board->calculateBoardMoves('O');
+        if (!allowed_moves) {
+            n_o_lm = 0;
+            std::cout << "Buggin" << std::endl;
+
         }
+        else
+            n_o_lm = allowed_moves->size();
     };
 
-
     Board* getBoard() {return this->g_board;};
-private:
-    Board* g_board;
 
     char curr_player_turn;
 
@@ -65,6 +62,10 @@ private:
     int n_x_moves;
     int n_o_moves;
 
+private:
+    Board* g_board;
+
+    
 };
 
 #endif 

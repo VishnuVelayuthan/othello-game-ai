@@ -41,8 +41,8 @@ int main() {
             game_partitions[i]->update((*curr_game_data)[i], curr_game_data->getWinner());
         }
 
-        // if (i + 1 % periodic_parition_store == 0) 
-            // savePartitionData(game_partitions);
+        csvifySnapshots(curr_game_data);
+
     }
 
     GamePartition* test1 = game_partitions[3];

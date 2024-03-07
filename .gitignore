@@ -1,3 +1,4 @@
 .ccls-cache/
 build/
 *main-othello-game
+main-othello-*

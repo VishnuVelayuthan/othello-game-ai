@@ -30,7 +30,7 @@ build/minimax.o: $(SRCDIR)/minimax.cpp $(INCLUDEDIR)/eval_board.h
 build/minimax_ab.o: $(SRCDIR)/minimax_ab.cpp $(INCLUDEDIR)/eval_board.h  
 	$(CC) $(CFLAGS) -c $< -o $@
 
-simulation: build/simulation_main.o build/board.o build/check_board_utility.o build/flip_board_utility.o build/play_game_sim.o build/player.o
+simulation: build/simulation_main.o build/board.o build/check_board_utility.o build/flip_board_utility.o build/play_game_sim.o build/player.o build/serialize.o
 	$(CC) $(CFLAGS) -o main-othello-simulation $^ -lcurl
 
 build/simulation_main.o: $(SRCDIR)/simulation/simulation_main.cpp 
@@ -42,6 +42,8 @@ build/play_game_sim.o: $(SRCDIR)/simulation/play_game.cpp $(INCLUDEDIR)/simulati
 build/player.o: $(SRCDIR)/simulation/player.cpp $(INCLUDEDIR)/simulation/player.h
 	$(CC) $(CFLAGS) -c $< -o $@ 
 
+build/serialize.o: $(SRCDIR)/simulation/serialize.cpp $(INCLUDEDIR)/simulation/simulation.h
+	$(CC) $(CFLAGS) -c $< -o $@ 
 
 clean: 
 	rm build/*.o
