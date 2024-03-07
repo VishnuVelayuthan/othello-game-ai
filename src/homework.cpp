@@ -11,7 +11,7 @@ using namespace std;
 
 int main() {
 
-    Board* board = new Board("input-files/05-debug-end.txt");
+    Board* board = new Board("input-files/08-debug-end.txt");
     cout << "Initial Board State: " << endl;
     cout << board->toString() << endl;
 

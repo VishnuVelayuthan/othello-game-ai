@@ -42,6 +42,9 @@ public:
 
     nlohmann::json toJson() const;
 
+    void flipPlayer();
+    void updateAllowedMoves();
+
 private:
     Tile*** g_board;
     char curr_turn_player;

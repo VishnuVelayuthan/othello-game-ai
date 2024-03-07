@@ -30,18 +30,21 @@ Snapshots* playGame(Player* x, Player* o, bool is_record_o) {
         curr_move = o->play(game_board);
         if (curr_move != nullptr) {
             pass_over = 0;
+            
             game_data->addMove(curr_move);
-            cout << "Valid moves are: " << game_board->allowedMovesToString() << endl;
             game_board->makeMove(curr_move);
+
             completed_move++;    
             o_completed_move++;
-            cout << "Played: " << (game_data->getLatestMove())->toString() << endl;
+
             cout << game_board->toString();
             cout << "------------------------" << endl;
         }
         else {
             pass_over++;
             cout << "  Passover incremented" << endl;
+            game_board->flipPlayer();
+            game_board->updateAllowedMoves();
         }
 
         if (completed_move % MOVES_PER_SNAP == is_record_o && completed_move != is_record_o)
@@ -53,17 +56,24 @@ Snapshots* playGame(Player* x, Player* o, bool is_record_o) {
         // second x plays
         curr_move = x->play(game_board);
         if (curr_move != nullptr) {
+
             pass_over = 0;
+
             game_data->addMove(curr_move);
             game_board->makeMove(curr_move);
+
             completed_move++;    
             x_completed_move++;
+
             cout << game_board->toString();
+            cout << "------------------------" << endl;
         }
         else {
             pass_over++;
             cout << "  Passover incremented" << endl;
-            
+
+            game_board->flipPlayer();
+            game_board->updateAllowedMoves();
         }
 
         if (completed_move % MOVES_PER_SNAP == is_record_o && completed_move != is_record_o)
@@ -72,6 +82,11 @@ Snapshots* playGame(Player* x, Player* o, bool is_record_o) {
         if (completed_move == MAX_MOVES || pass_over == 2)
             break;
         
+    }
+
+    if (completed_move < Board::BOARD_SIZE * Board::BOARD_SIZE / 1.5){
+        delete game_data;
+        return nullptr;
     }
  
     game_data->add(completed_move / GamePartition::NUM_GAME_PARTITIONS + 1, game_board, x_completed_move, o_completed_move);

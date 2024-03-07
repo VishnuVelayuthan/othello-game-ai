@@ -18,7 +18,7 @@ int main() {
 
     openai::start(); 
 
-    int PRE_GAME_NUM = 1; // change every run
+    int PRE_GAME_NUM = 3; // change every run
     int num_games = 1;
     int periodic_parition_store = 10;
 
@@ -36,6 +36,11 @@ int main() {
             curr_game_data = playGame(p1, p2, false);
         else 
             curr_game_data = playGame(p1, p2, true);
+
+        if (curr_game_data == nullptr) {
+            i--;
+            continue;
+        }
 
         // saveGameData(curr_game_data);
         for (int i = 0; i < GamePartition::NUM_GAME_PARTITIONS; i++) {

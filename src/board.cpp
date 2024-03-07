@@ -161,7 +161,7 @@ std::unordered_set<Move*, std::hash<Move*>, MovePointerDefEqual>* Board::calcula
     this->n_allowed_moves = allowed_moves->size();
 
     if (n_allowed_moves == 0) 
-        cout << "  Board.cpp: 0 moves available" << endl;
+        cout << "  computed 0 moves available" << endl;
     return allowed_moves;
 }
 
@@ -233,7 +233,7 @@ void Board::makeMove(Move* n_move) {
     // allowed_moves->clear();
     // delete allowed_moves;
 
-    this->allowed_moves = this->calculateBoardMoves(this->curr_turn_player);
+    updateAllowedMoves();
 }
 
 Move* Board::findMove(string move_str) {
@@ -282,6 +282,13 @@ string Board::allowedMovesToString() {
     return m_str;
 }
 
+void Board::flipPlayer() {
+    this->curr_turn_player = curr_turn_player == 'X' ? 'O' : 'X';
+}
+
+void Board::updateAllowedMoves() {
+    this->allowed_moves = this->calculateBoardMoves(curr_turn_player);
+}
 
 nlohmann::json Board::toJson() const {
     nlohmann::json j;

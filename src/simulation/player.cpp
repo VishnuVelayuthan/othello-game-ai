@@ -50,12 +50,10 @@ Move* OpenAIPlayer::play(Board* board) {
 
     string move_str = completion["choices"][0]["message"]["content"];
 
-    cout << move_str << endl;
-    cout << board->allowedMovesToString() << endl;
+    cout << "  Valid Moves: " << board->allowedMovesToString() << endl;
+    cout << "  AI Choice: " << move_str << endl;
 
     new_m = board->findMove(move_str);
-
-
 
     Board* next_move = board->copyBoard();
     next_move->makeMove(new_m);

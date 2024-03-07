@@ -1,0 +1,14 @@
+O 
+200 200 
+OOOOOOO.....
+OOOOOO......
+OXOX........
+OOXXXX......
+OXXXX......O
+OXXXX.....OO
+..X.X...X.OO
+.....X..XXOO
+........XOOO
+.......XOOOO
+.......OOOOO
+.....OOOOOOO

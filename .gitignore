@@ -2,3 +2,4 @@
 build/
 *main-othello-game
 main-othello-*
+data/*
