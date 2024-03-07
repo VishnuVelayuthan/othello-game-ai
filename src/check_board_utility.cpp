@@ -241,7 +241,7 @@ Move* checkBoardLDD(Tile*** g_board, int b_size, unordered_set<Move*, hash<Move*
     if (!curr_tile->isOccupied() || curr_tile->getPlayerOcc() == curr_player)
         return null_move;
 
-    for (int k = 2; k <= std::min(b_size - check_row,  check_col) ; k++) {
+    for (int k = 2; k <= std::min(b_size - check_row - 1,  check_col) ; k++) {
         curr_tile = g_board[check_row + k][check_col - k];
 
         if (curr_tile->getPlayerOcc() == curr_player) 
@@ -278,7 +278,7 @@ Move* checkBoardRDD(Tile*** g_board, int b_size, unordered_set<Move*, hash<Move*
     if (!curr_tile->isOccupied() || curr_tile->getPlayerOcc() == curr_player)
         return null_move;
 
-    for (int k = 2; k <= std::min(b_size - check_row,  b_size - check_col) ; k++) {
+    for (int k = 2; k <= std::min(b_size - check_row - 1,  b_size - check_col - 1) ; k++) {
         curr_tile = g_board[check_row + k][check_col + k];
 
         if (curr_tile->getPlayerOcc() == curr_player) 
