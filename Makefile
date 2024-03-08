@@ -32,7 +32,7 @@ build/minimax_ab.o: $(SRCDIR)/minimax_ab.cpp $(INCLUDEDIR)/eval_board.h
 
 # SIMULATION 
 
-simulation: build/simulation_main.o build/board.o build/check_board_utility.o build/flip_board_utility.o build/play_game_sim.o build/player.o build/serialize.o build/game_partition.o
+simulation: build/simulation_main.o build/board.o build/check_board_utility.o build/flip_board_utility.o build/play_game_sim.o build/player.o build/serialize.o build/game_partition.o build/evaluate_board.o build/minimax.o
 	$(CC) $(CFLAGS) -o main-othello-simulation $^ -lcurl
 
 build/simulation_main.o: $(SRCDIR)/simulation/simulation_main.cpp 

@@ -8,6 +8,7 @@
 #include "../../include/simulation/simulation.h"
 #include "../../include/evaluate/game_partition.h"
 
+#include "../../include/eval_board.h"
 
 #include <iostream>
 #include <string>
@@ -25,16 +26,17 @@ int main() {
 
     nlohmann::json j;
     
-    std::ifstream file("data/serialized-game-partitions/game-partition75.json");
+    std::ifstream file("data/serialized-game-partitions/game-partition83.json");
     file >> j;
 
-    Player* p1 = new OpenAIPlayer();
+    Player* p1 = new MinimaxPlayer();
     Player* p2 = new OpenAIPlayer();
 
 
     Snapshots* curr_game_data;
     GamePartition** game_partitions = deserializeGamePartitionArr(j);
 
+    initializeGamePartitions();
     for (int i = 0; i < num_games; i++) {
 
         if (i % 2 == 0)
@@ -47,7 +49,6 @@ int main() {
             continue;
         }
 
-        // saveGameData(curr_game_data);
         for (int i = 0; i < GamePartition::NUM_GAME_PARTITIONS; i++) {
             game_partitions[i]->update((*curr_game_data)[i], curr_game_data->getWinner());
         }

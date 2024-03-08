@@ -19,15 +19,15 @@ protected:
 };
 
 
-// class MinimaxPlayer : public Player {
-// public: 
-//     MinimaxPlayer(char player_sym) : Player(player_sym, false){};
-//
-//     inline Move* play(Board* board) override;
-//
-// private:
-//     static constexpr int PLY_COUNT = 8;
-// };
+class MinimaxPlayer : public Player {
+public: 
+    MinimaxPlayer() : Player(false){};
+
+    Move* play(Board* board) override;
+
+private:
+    static constexpr int PLY_COUNT = 8;
+};
 
 class OpenAIPlayer: public Player {
 public:

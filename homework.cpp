@@ -12,23 +12,25 @@ int main() {
 
     initializeGamePartitions();
 
-    Board* board = new Board("input-files/11-v.txt");
+    Board* board = new Board("input.txt");
 
     int depth = 4;
 
     double curr_time = board->getTurnTime();
     int num_lm = (board->getAllowedMoves())->size();
-
-    if (curr_time > 200 && num_lm < 6) 
+ 
+    if (curr_time > 290)
+        depth = 4;
+    else if (curr_time > 200 && num_lm < 6) 
         depth = 8;
     else if (curr_time >= 200 && num_lm >= 6)
         depth = 6;
     else if (curr_time < 200 && num_lm < 6) 
         depth = 6;
-    else if (curr_time < 200 && num_lm >= 6)
+    else if (curr_time < 100 && num_lm >= 6)
         depth = 4;
-    else if (curr_time < 100)
-        depth = 8;
+    else if (curr_time < 50)
+        depth = 4;
 
     Move* opt_move = minimaxAlphaBetaSearch(board, depth);
     
@@ -47,13 +49,14 @@ int main() {
 }
 
 
-// #include "src/board.cpp"
-// #include "src/check_board_utility.cpp"
-// #include "src/flip_board_utility.cpp"
-// #include "src/evaluate_board.cpp"
-// #include "src/game_partition.cpp"
-// #include "src/minimax.cpp"
-// #include "src/minimax_ab.cpp"
+// comment out and run make 
+#include "src/board.cpp"
+#include "src/check_board_utility.cpp"
+#include "src/flip_board_utility.cpp"
+#include "src/evaluate_board.cpp"
+#include "src/game_partition.cpp"
+#include "src/minimax.cpp"
+#include "src/minimax_ab.cpp"
 
 
 

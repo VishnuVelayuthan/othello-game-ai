@@ -8,9 +8,9 @@
 
 using namespace std;
 
-// Move* MinimaxPlayer::play(Board* board) {
-//     return minimaxAlphaBetaSearch(board, PLY_COUNT);
-// }
+Move* MinimaxPlayer::play(Board* board) {
+    return minimaxAlphaBetaSearch(board, 6);
+}
 
 
 static auto& openi = openai::instance(); 

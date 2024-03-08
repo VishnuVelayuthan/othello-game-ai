@@ -165,8 +165,6 @@ std::unordered_set<Move*, std::hash<Move*>, MovePointerDefEqual>* Board::calcula
     
     this->n_allowed_moves = allowed_moves->size();
 
-    if (n_allowed_moves == 0) 
-        cout << "  computed 0 moves available" << endl;
     return allowed_moves;
 }
 
