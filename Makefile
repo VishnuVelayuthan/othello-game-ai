@@ -6,7 +6,7 @@ INCLUDEDIR = include
 CC = g++
 CFLAGS = -Wall -g -I $(INCLUDEDIR) -std=c++17
 
-all: build/main.o build/board.o build/check_board_utility.o build/flip_board_utility.o build/evaluate_board.o build/minimax.o build/minimax_ab.o | $(BUILDDIR)
+all: build/main.o build/board.o build/check_board_utility.o build/flip_board_utility.o build/evaluate_board.o build/minimax.o build/minimax_ab.o build/game_partition.o | $(BUILDDIR)
 	$(CC) $(CFLAGS) -o main-othello-game $^
 
 build/main.o: $(SRCDIR)/homework.cpp | $(BUILDDIR)	
@@ -30,6 +30,8 @@ build/minimax.o: $(SRCDIR)/minimax.cpp $(INCLUDEDIR)/eval_board.h
 build/minimax_ab.o: $(SRCDIR)/minimax_ab.cpp $(INCLUDEDIR)/eval_board.h  
 	$(CC) $(CFLAGS) -c $< -o $@
 
+# SIMULATION 
+
 simulation: build/simulation_main.o build/board.o build/check_board_utility.o build/flip_board_utility.o build/play_game_sim.o build/player.o build/serialize.o build/game_partition.o
 	$(CC) $(CFLAGS) -o main-othello-simulation $^ -lcurl
 
@@ -48,6 +50,15 @@ build/player.o: $(SRCDIR)/simulation/player.cpp $(INCLUDEDIR)/simulation/player.
 
 build/serialize.o: $(SRCDIR)/simulation/serialize.cpp $(INCLUDEDIR)/simulation/simulation.h
 	$(CC) $(CFLAGS) -c $< -o $@ 
+
+# TEST SIMULATION 
+test_simulation: build/test_simulation.o build/board.o build/check_board_utility.o build/flip_board_utility.o build/play_game_sim.o build/player.o build/serialize.o build/game_partition.o
+	$(CC) $(CFLAGS) -o main-othello-test-simulation $^ -lcurl
+
+build/test_simulation.o: $(SRCDIR)/simulation/test_sim.cpp
+	$(CC) $(CFLAGS) -c $< -o $@ 
+
+
 
 clean: 
 	rm build/*.o

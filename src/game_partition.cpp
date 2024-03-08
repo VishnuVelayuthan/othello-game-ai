@@ -3,6 +3,7 @@
 #include <sstream>
 
 using json = nlohmann::json;
+using namespace std;
 
 
 GamePartition::GamePartition() {
@@ -117,8 +118,8 @@ GamePartition* GamePartition::fromJson(const nlohmann::json& j) {
 
         // Assuming tile_weights is already allocated with fixed dimensions
         // and you have a method to set each weight, e.g., setTileWeight(x, y, weight)
-        for (int i = 0; i < GamePartition::NUM_GAME_PARTITIONS; ++i) {
-            for (int k = 0; k < GamePartition::NUM_GAME_PARTITIONS; ++k) {
+        for (int i = 0; i < Board::BOARD_SIZE; ++i) {
+            for (int k = 0; k < Board::BOARD_SIZE; ++k) {
                 partition->setTileWeight(i, k, j["tile_weights"][i][k]);
             }
         }
@@ -147,4 +148,95 @@ GamePartition* GamePartition::fromJson(const nlohmann::json& j) {
 
 void GamePartition::setTileWeight(int i, int j, double weight) {
     this->tile_weights[i][j] = weight;
+}
+
+GamePartition** deserializeJson(nlohmann::json j) {
+
+    GamePartition** game_partitions = new GamePartition*[GamePartition::NUM_GAME_PARTITIONS];
+
+    int g_i = 0;
+    GamePartition* curr_gp;
+    for (const auto& item : j) {
+        curr_gp = new GamePartition();
+        // Access the array
+        auto array = item["tile_weights"];
+
+        int i = 0;
+        for (auto tile_weight_row : array) {
+            int j = 0;
+            for (double tile_weight : tile_weight_row) {
+                curr_gp->setTileWeight(i, j, tile_weight);
+                j++;
+            }
+            i++;  
+        }
+
+        // Access the map
+        auto map = item["map"];
+        for (auto& [key, value] : map.items()) {
+            std::cout << key << ": " << value << std::endl;
+        }
+        
+        g_i++;
+    }
+}
+
+
+void GamePartition::aggregateData(GamePartition* second_gp) {
+
+    for(int i = 0; i < Board::BOARD_SIZE; i++) {
+        for (int j = 0; j < Board::BOARD_SIZE; j++) {
+            cout << "  Tile Weights before: " << tile_weights[i][j] << endl;
+            this->tile_weights[i][j] += second_gp->tile_weights[i][j];
+            cout << "  Tile Weights after: " << tile_weights[i][j] << endl;
+        }
+    }
+
+    for (auto& pair : this->tile_relation_weights) {
+        tile_relation_weights[pair.first] = pair.second + second_gp->tile_relation_weights[pair.first];
+    }
+
+    for (auto& pair : second_gp->tile_relation_weights) {
+        tile_relation_weights[pair.first] = pair.second + this->tile_relation_weights[pair.first];
+    }
+}
+
+double GamePartition::calcDPZ(int u_disk_parity) {
+    return (u_disk_parity - this->disk_parity_avg) / this->disk_parity_dev;
+}
+
+double GamePartition::calcLMZ(int num_legal_moves) {
+    return (num_legal_moves - this->legal_move_avg) / this->legal_move_dev;
+}
+
+double GamePartition::calcTileScore(Board* e_board, char player) {
+    Tile*** g_board = e_board->getGameBoard();
+
+    double score = 0;
+    for (int i = 0; i < Board::BOARD_SIZE; i++) {
+        for (int j = 0; j < Board::BOARD_SIZE; j++) {
+            if (g_board[i][j]->getPlayerOcc() == player) 
+                score += tile_weights[i][j];
+        }
+    }
+
+    return score;
+}
+
+double GamePartition::calcTileRelationScore(Board* e_board, char player) {
+    Tile*** g_board = e_board->getGameBoard();
+
+    
+    Tile* t1;
+    Tile* t2;
+    tuple<int, int, int, int> key;
+    double score = 0;
+    for (const auto& pair : tile_relation_weights) {        
+        key = pair.first;
+        t1 = g_board[get<0>(key)][get<1>(key)];
+        t2 = g_board[get<2>(key)][get<3>(key)];
+
+        if (t1->getPlayerOcc() == t2->getPlayerOcc() && t1->getPlayerOcc() == player)
+            score += pair.second; 
+    }
 }

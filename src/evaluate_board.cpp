@@ -1,6 +1,9 @@
 #include "../include/eval_board.h"
 #include "../include/board.h"
 #include "../include/tile.h"
+#include "../include/evaluate/game_partition.h"
+#include "../include/evaluate/game_partition_json.h"
+#include "../include/openai/nlohmann/json.hpp"
 
 static double DISK_PARITY_WEIGHT = 1.0;
 static double MOBILITY_WEIGHT = 2.0;
@@ -8,30 +11,27 @@ static double CORNER_OCCUPANCY_WEIGHT = 5.0;
 static double STABILITY_WEIGHT = 3.0;
 static double EDGE_OCCUPANCY_WEIGHT = 2.5;
 
-static double TILE_EVAL_BOARD[Board::BOARD_SIZE][Board::BOARD_SIZE]  {
-    {100, -30, 6, 2, 2, 2, 2, 2, 2, 6, -30, 100}, 
-    {-30, -50, 0, 0, 0, 0, 0, 0, 0, 0, -50, -30}, 
-    {6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6}, 
-    {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2}, 
-    {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2}, 
-    {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2}, 
-    {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2}, 
-    {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2}, 
-    {2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2}, 
-    {6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6}, 
-    {-30, -50, 0, 0, 0, 0, 0, 0, 0, 0, -50, -30}, 
-    {100, -30, 6, 2, 2, 2, 2, 2, 2, 6, -30, 100}
-};
+static int MOVE_BRACKET = (Board::BOARD_SIZE * Board::BOARD_SIZE - 8) / GamePartition::NUM_GAME_PARTITIONS;
 
-static int CORNER_INDS[4][2] = {
-    {0,0}, {0, Board::BOARD_SIZE},
-    {Board::BOARD_SIZE, 0}, {Board::BOARD_SIZE, Board::BOARD_SIZE}
-};
+static GamePartition* game_partitions[GamePartition::NUM_GAME_PARTITIONS];
 
+void initializeGamePartition() {
+    nlohmann::json gp_json = nlohmann::json::parse(GAME_PARTITION_JSON);
+    nlohmann::json stats_json = nlohmann::json::parse(GAME_STATS_JSON);
 
+    int i = 0; // not the best code i've written 
+    for (const auto& jPartition : gp_json) {
+        GamePartition* partition = GamePartition::fromJson(jPartition);
+        game_partitions[i] = partition;
+        i++;
+    }
 
-double calcStaticTileScore(Board* e_board, char player);
+    // i = 0;
+    // for (const auto& j_stats : stats_json) {
+    //     game_partition[i]
+    // }
 
+}
 
 // minimize player's moves and maximizes our moves
 // want a placement eval static array 
@@ -43,33 +43,24 @@ double evaluateBoard(Board* e_board, char opt_player) {
     // User's score 
     int u_disk_parity = opt_player == 'X' ? 
         e_board->getNumXTiles() : e_board->getNumOTiles();
-    double u_static_tile_score = calcStaticTileScore(e_board, opt_player);
     
-    int num_moves = (e_board->getAllowedMoves())->size();
+    int num_legal_moves = (e_board->getAllowedMoves())->size();
+    
+    GamePartition* curr_gp = game_partitions[move_num / MOVE_BRACKET];
 
+    // tile z-score 
+    double dp_z = curr_gp->calcDPZ(u_disk_parity);
+    
+    // legal moves z-score 
+    double lm_z = curr_gp->calcLMZ(num_legal_moves);
+    
+    // tile score 
+    double tile_score = curr_gp->calcTileScore(e_board, opt_player);
+    
+    // tile relation score 
+    double tile_relation_score = curr_gp->calcTileRelationScore(e_board, opt_player);
 
 
     return 0;
 
 }
-
-double calcStaticTileScore(Board* e_board, char player) {
-
-    double score = 0;
-    Tile* curr_tile;
-    Tile*** g_board = e_board->getGameBoard();
-    for (int i = 0; i < Board::BOARD_SIZE; i++) {
-        for (int j = 0; j < Board::BOARD_SIZE; j++) {
-            curr_tile = g_board[i][j];
-
-            if (curr_tile->getPlayerOcc() != player) continue;
-
-            score += TILE_EVAL_BOARD[i][j]; 
-        }
-    }
-
-    return score;
-
-}
-
-

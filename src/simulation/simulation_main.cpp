@@ -19,13 +19,13 @@ int main() {
 
     openai::start(); 
 
-    int PRE_GAME_NUM = 39; // change every run
+    int PRE_GAME_NUM = 77; // change every run
     int num_games = 40;
-    int periodic_parition_store = 5;
+    int periodic_parition_store = 3;
 
     nlohmann::json j;
     
-    std::ifstream file("data/serialized-game-partitions/game-partition49.json");
+    std::ifstream file("data/serialized-game-partitions/game-partition75.json");
     file >> j;
 
     Player* p1 = new OpenAIPlayer();
@@ -34,8 +34,6 @@ int main() {
 
     Snapshots* curr_game_data;
     GamePartition** game_partitions = deserializeGamePartitionArr(j);
-    for (int i = 0; i < Board::BOARD_SIZE; i++) 
-        game_partitions[i] = new GamePartition();
 
     for (int i = 0; i < num_games; i++) {
 

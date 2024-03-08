@@ -1,4 +1,4 @@
-
+import json
 import pandas as pd 
 
 def process_file(filename):
@@ -37,18 +37,22 @@ if __name__ == "__main__":
     columns = ['Tiles', 'Moves', 'LM']
     stat_types = ["mean", "std"]
 
+    stats = []
     for i in range(10):
         file_name = f"../../data/csv-snapshots/snapshot-{i}.csv" 
         # file_name = f"snapshot-{i}.csv" 
-        stats = process_file(file_name)
+        stats.append(process_file(file_name))
 
-        with open(output_file, "a") as f: 
-            f.write("===================\n")
-            f.write(f"For Snapshot {i}: \n")
-            for column in columns:
-                for stat_type in stat_types:
-                    f.write(f"\t{column} {stat_type}: {stats[stat_type][column]}\n")
+        # with open(output_file, "a") as f: 
+        #     f.write("===================\n")
+        #     f.write(f"For Snapshot {i}: \n")
+        #     for column in columns:
+        #         for stat_type in stat_types:
+        #             f.write(f"\t{column} {stat_type}: {stats[stat_type][column]}\n")
                        
+    with open("phase_statistics.json", "w") as file:  
+        json.dump(stats, file, indent=4)
+    
 
 
 

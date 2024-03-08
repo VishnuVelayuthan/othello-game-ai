@@ -31,10 +31,10 @@ public:
 
     inline nlohmann::json toJson() {
         nlohmann::json j;
-        j["i_row"] = i_row;
-        j["i_col"] = i_col;
-        j["c_col"] = c_col;
-        j["p_occ"] = p_occ;
+        j.emplace("i_row", i_row);
+        j.emplace("i_col", i_col); 
+        j.emplace("c_col", c_col);
+        j.emplace("p_occ", p_occ);
         return j;
     };
 

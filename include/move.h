@@ -63,9 +63,9 @@ public:
 
     inline nlohmann::json toJson() {
         nlohmann::json j;
-        j["row"] = row;
-        j["col"] = col;
-        j["m_player"] = m_player;
+        j.emplace("row", row);
+        j.emplace("col", col);
+        j.emplace("m_player", m_player);
         return j; 
     };
 

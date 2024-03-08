@@ -39,18 +39,32 @@ public:
     json toJson() const;
 
     static GamePartition* fromJson(const nlohmann::json& j);
-    void setTileWeight(int i, int j, double weight);
 
+    void setTileWeight(int i, int j, double weight);
+    void insertTileRelation(tuple<int,int,int,int> key, double weight);
+
+    double getDiskParityAvg();
+    double getDiskParityDev();
+
+    double getLegalMoveRatioAvg();
+    double getLegalMoveRatioDev();
+    
+    void aggregateData(GamePartition* second_gp); 
+
+    double calcDPZ(int u_disk_parity);
+    double calcLMZ(int num_legal_moves);
+    double calcTileScore(Board* e_board, char player);
+    double calcTileRelationScore(Board* e_board, char player);
 
 private:
     double** tile_weights;
     unordered_map<tuple<int, int, int, int>, double, hash_tuple> tile_relation_weights;
 
-    double num_disk_parity;
-    double t_disk_parity_dev;
+    double disk_parity_avg;
+    double disk_parity_dev;
 
-    double t_legal_move_ratio_mean;
-    double t_legal_move_ration_dev;
+    double legal_move_avg;
+    double legal_move_dev;
 };
 
 
