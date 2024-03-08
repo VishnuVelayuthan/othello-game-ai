@@ -38,6 +38,11 @@ Board::Board(std::string file_name) {
     buffer = istringstream(line);
     buffer >> x_time >> o_time;
 
+    if (curr_turn_player == 'X')
+        this->curr_turn_time = x_time;
+    else 
+        this->curr_turn_time = o_time;
+
     // Read board into 2D Tile Array
     this->g_board = new Tile**[this->BOARD_SIZE];
     
@@ -57,7 +62,7 @@ Board::Board(std::string file_name) {
                 n_o_tiles++;
         }
 
-    }
+    } 
 
     this->allowed_moves = this->calculateBoardMoves(this->curr_turn_player);
 

@@ -45,12 +45,16 @@ public:
     void flipPlayer();
     void updateAllowedMoves();
 
+    double getTurnTime() {return this->curr_turn_time;};
+
 private:
     Tile*** g_board;
     char curr_turn_player;
 
     int n_x_tiles;
     int n_o_tiles; 
+
+    double curr_turn_time;
 
     int n_allowed_moves;
     std::unordered_set<Move*, std::hash<Move*>, MovePointerDefEqual>* allowed_moves;

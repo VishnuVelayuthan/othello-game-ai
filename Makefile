@@ -9,7 +9,7 @@ CFLAGS = -Wall -g -I $(INCLUDEDIR) -std=c++17
 all: build/main.o build/board.o build/check_board_utility.o build/flip_board_utility.o build/evaluate_board.o build/minimax.o build/minimax_ab.o build/game_partition.o | $(BUILDDIR)
 	$(CC) $(CFLAGS) -o main-othello-game $^
 
-build/main.o: $(SRCDIR)/homework.cpp | $(BUILDDIR)	
+build/main.o: homework.cpp | $(BUILDDIR)	
 	$(CC) $(CFLAGS) -c $< -o $@
 
 build/board.o: $(SRCDIR)/board.cpp $(INCLUDEDIR)/board.h $(INCLUDEDIR)/tile.h $(INCLUDEDIR)/move.h | $(BUILDDIR)
