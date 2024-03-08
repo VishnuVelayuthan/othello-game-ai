@@ -14,7 +14,7 @@ static double TILE_SCORE_WEIGHT = 0.5;
 static double NUM_MOVES_WEIGHT = 1.0;
 static double RELATION_SCORE_WEIGHT = 0.5;
 
-static int MOVE_BRACKET = (Board::BOARD_SIZE * Board::BOARD_SIZE - 8) / GamePartition::NUM_GAME_PARTITIONS;
+static int MOVE_BRACKET = (Board::BOARD_SIZE * Board::BOARD_SIZE) / GamePartition::NUM_GAME_PARTITIONS;
 
 static GamePartition* game_partitions[GamePartition::NUM_GAME_PARTITIONS];
 
@@ -40,7 +40,7 @@ void initializeGamePartitions() {
         game_partitions[i]->setNMDev(j_stats["std"]["Moves"]);
 
 
-        cout << j_stats["std"]["Tiles"] << endl;
+        // cout << j_stats["std"]["Tiles"] << endl;
         i++;
     }
 }
@@ -54,7 +54,7 @@ void deleteGamePartitions() {
 // want a placement eval static array 
 double evaluateBoard(Board* e_board, char opt_player) {
 
-    int move_num = 1 + e_board->getNumXTiles() + e_board->getNumOTiles();
+    int move_num = 1 + e_board->getNumXTiles() + e_board->getNumOTiles() - 8;
     bool is_u_board = opt_player == e_board->getCurrTurnPlayer();
 
     // User's score 
@@ -78,10 +78,10 @@ double evaluateBoard(Board* e_board, char opt_player) {
     // tile relation score 
     double tile_relation_score = curr_gp->calcTileRelationScore(e_board, opt_player);
 
-    cout << "  Disk Parity: " << dp_z << endl;
-    cout << "  Lm: " << lm_z << endl;
-    cout << "  Tile RS: " << tile_relation_score << endl;
-    cout << "  Tile Sc: " << tile_score << endl;
+    // cout << "  Disk Parity: " << dp_z << endl;
+    // cout << "  Lm: " << lm_z << endl;
+    // cout << "  Tile RS: " << tile_relation_score << endl;
+    // cout << "  Tile Sc: " << tile_score << endl;
 
 
     return (
