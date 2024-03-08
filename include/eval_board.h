@@ -24,4 +24,7 @@ double evaluateBoard(Board* e_board, char opt_player);
 Move* minimaxSearch(Board* s_board, int ply_count);
 Move* minimaxAlphaBetaSearch(Board* s_board, int ply_count);
 
+void initializeGamePartitions();
+void deleteGamePartitions();
+
 #endif

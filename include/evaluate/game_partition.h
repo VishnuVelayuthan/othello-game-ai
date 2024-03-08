@@ -43,18 +43,23 @@ public:
     void setTileWeight(int i, int j, double weight);
     void insertTileRelation(tuple<int,int,int,int> key, double weight);
 
-    double getDiskParityAvg();
-    double getDiskParityDev();
-
-    double getLegalMoveRatioAvg();
-    double getLegalMoveRatioDev();
-    
     void aggregateData(GamePartition* second_gp); 
 
     double calcDPZ(int u_disk_parity);
     double calcLMZ(int num_legal_moves);
+    double calcNMZ(int num_moves);
+
     double calcTileScore(Board* e_board, char player);
     double calcTileRelationScore(Board* e_board, char player);
+
+    inline void setDPAvg(double dp_avg) {this->disk_parity_avg=dp_avg;};
+    inline void setDPDev(double dp_dev){this->disk_parity_dev=dp_dev;};
+
+    inline void setLMAvg(double lm_avg){this->legal_move_avg=lm_avg;};
+    inline void setLMDev(double lm_dev){this->legal_move_dev=lm_dev;};
+
+    inline void setNMAvg(double nm_avg){this->n_moves_avg=nm_avg;};
+    inline void setNMDev(double nm_dev){this->n_moves_dev=nm_dev;};
 
 private:
     double** tile_weights;
@@ -65,6 +70,9 @@ private:
 
     double legal_move_avg;
     double legal_move_dev;
+
+    double n_moves_avg;
+    double n_moves_dev;
 };
 
 

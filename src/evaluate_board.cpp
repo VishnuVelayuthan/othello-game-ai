@@ -6,16 +6,16 @@
 #include "../include/openai/nlohmann/json.hpp"
 
 static double DISK_PARITY_WEIGHT = 1.0;
-static double MOBILITY_WEIGHT = 2.0;
-static double CORNER_OCCUPANCY_WEIGHT = 5.0;
-static double STABILITY_WEIGHT = 3.0;
-static double EDGE_OCCUPANCY_WEIGHT = 2.5;
+static double LEGAL_MOVE_WEIGHT = 3.0;
+static double TILE_SCORE_WEIGHT = 2.0;
+static double NUM_MOVES_WEIGHT = 1.0;
+static double RELATION_SCORE_WEIGHT = 1.0;
 
 static int MOVE_BRACKET = (Board::BOARD_SIZE * Board::BOARD_SIZE - 8) / GamePartition::NUM_GAME_PARTITIONS;
 
 static GamePartition* game_partitions[GamePartition::NUM_GAME_PARTITIONS];
 
-void initializeGamePartition() {
+void initializeGamePartitions() {
     nlohmann::json gp_json = nlohmann::json::parse(GAME_PARTITION_JSON);
     nlohmann::json stats_json = nlohmann::json::parse(GAME_STATS_JSON);
 
@@ -26,11 +26,21 @@ void initializeGamePartition() {
         i++;
     }
 
-    // i = 0;
-    // for (const auto& j_stats : stats_json) {
-    //     game_partition[i]
-    // }
+    i = 0;
+    for (const auto& j_stats : stats_json) {
+        game_partitions[i]->setDPAvg(j_stats["mean"]["Tiles"]);
+        game_partitions[i]->setLMAvg(j_stats["mean"]["LM"]);
+        game_partitions[i]->setNMAvg(j_stats["mean"]["Moves"]);
 
+        game_partitions[i]->setDPDev(j_stats["std"]["Tiles"]);
+        game_partitions[i]->setLMDev(j_stats["std"]["LM"]);
+        game_partitions[i]->setNMDev(j_stats["std"]["Moves"]);
+    }
+}
+
+void deleteGamePartitions() {
+    for (int i = 0; i < GamePartition::NUM_GAME_PARTITIONS; i++) 
+        delete game_partitions[i];
 }
 
 // minimize player's moves and maximizes our moves
@@ -50,9 +60,10 @@ double evaluateBoard(Board* e_board, char opt_player) {
 
     // tile z-score 
     double dp_z = curr_gp->calcDPZ(u_disk_parity);
-    
     // legal moves z-score 
     double lm_z = curr_gp->calcLMZ(num_legal_moves);
+
+    // double nm_z = curr_gp->calcLMZ(moves_num);
     
     // tile score 
     double tile_score = curr_gp->calcTileScore(e_board, opt_player);
@@ -60,7 +71,15 @@ double evaluateBoard(Board* e_board, char opt_player) {
     // tile relation score 
     double tile_relation_score = curr_gp->calcTileRelationScore(e_board, opt_player);
 
+    cout << "  Tile RS: " << tile_relation_score << endl;
+    cout << "  Tile Sc: " << tile_score << endl;
 
-    return 0;
+
+    return (
+        dp_z * DISK_PARITY_WEIGHT +
+        lm_z * LEGAL_MOVE_WEIGHT + 
+        tile_score * TILE_SCORE_WEIGHT + 
+        tile_relation_score * RELATION_SCORE_WEIGHT
+    );
 
 }

@@ -1,6 +1,7 @@
 #include "../include/evaluate/game_partition.h"
 
 #include <sstream>
+#include <cmath>
 
 using json = nlohmann::json;
 using namespace std;
@@ -209,6 +210,10 @@ double GamePartition::calcLMZ(int num_legal_moves) {
     return (num_legal_moves - this->legal_move_avg) / this->legal_move_dev;
 }
 
+double GamePartition::calcNMZ(int num_moves) {
+    return (num_moves - this->n_moves_avg) / this->n_moves_dev;
+}
+
 double GamePartition::calcTileScore(Board* e_board, char player) {
     Tile*** g_board = e_board->getGameBoard();
 
@@ -231,6 +236,7 @@ double GamePartition::calcTileRelationScore(Board* e_board, char player) {
     Tile* t2;
     tuple<int, int, int, int> key;
     double score = 0;
+    double total_score = 0;
     for (const auto& pair : tile_relation_weights) {        
         key = pair.first;
         t1 = g_board[get<0>(key)][get<1>(key)];
@@ -238,5 +244,9 @@ double GamePartition::calcTileRelationScore(Board* e_board, char player) {
 
         if (t1->getPlayerOcc() == t2->getPlayerOcc() && t1->getPlayerOcc() == player)
             score += pair.second; 
+
+        total_score += pair.second;
     }
+
+    return score / total_score;
 }

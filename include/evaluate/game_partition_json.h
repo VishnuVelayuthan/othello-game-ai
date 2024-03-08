@@ -2,7 +2,7 @@
 
 using json = nlohmann::json;
 
-auto GAME_STATS_JSON = R"(
+static constexpr auto GAME_STATS_JSON = R"(
 [
     {
         "mean": {
@@ -128,7 +128,7 @@ auto GAME_STATS_JSON = R"(
 )";
 
 // game_partition_49
-auto GAME_PARTITION_JSON = R"(
+static constexpr auto GAME_PARTITION_JSON = R"(
 [
     {
         "tile_relation_weights": {
