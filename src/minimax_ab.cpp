@@ -21,11 +21,12 @@ Move* minimaxSearch(Board* s_board, int ply_count) {
 }
 
 MMScoreMove* minimaxMaxValue(Board* cs_board, int ply_count, char opt_player) {
+
+    std::unordered_set<Move*, std::hash<Move*>, MovePointerDefEqual>* cs_operators = cs_board->getAllowedMoves();
     if (ply_count == 0) 
         return new MMScoreMove(evaluateBoard(cs_board, opt_player), nullptr);
 
     MMScoreMove* max_min_sm = new MMScoreMove(-std::numeric_limits<double>::infinity(), nullptr);
-    std::unordered_set<Move*, std::hash<Move*>, MovePointerDefEqual>* cs_operators = cs_board->getAllowedMoves();
 
     MMScoreMove* curr_min;
     Board* new_board;

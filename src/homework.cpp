@@ -13,11 +13,11 @@ int main() {
     // initialize game partitions from json 
     initializeGamePartitions();
 
-    Board* board = new Board("input-files/01-test1.txt");
+    Board* board = new Board("input-files/06-debug-mid.txt");
     cout << "Initial Board State: " << endl;
     cout << board->toString() << endl;
 
-    Move* opt_move = minimaxAlphaBetaSearch(board, 1);
+    Move* opt_move = minimaxAlphaBetaSearch(board, 6);
     
     Board* move_board = board->copyBoard();
     move_board->makeMove(opt_move);

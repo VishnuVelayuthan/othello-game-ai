@@ -248,5 +248,5 @@ double GamePartition::calcTileRelationScore(Board* e_board, char player) {
         total_score += pair.second;
     }
 
-    return score / total_score;
+    return score;
 }

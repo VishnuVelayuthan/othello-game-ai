@@ -5,11 +5,14 @@
 #include "../include/evaluate/game_partition_json.h"
 #include "../include/openai/nlohmann/json.hpp"
 
-static double DISK_PARITY_WEIGHT = 1.0;
-static double LEGAL_MOVE_WEIGHT = 3.0;
-static double TILE_SCORE_WEIGHT = 2.0;
+#include <cmath>
+using namespace std;
+
+static double DISK_PARITY_WEIGHT = -1.0;
+static double LEGAL_MOVE_WEIGHT = 2.0;
+static double TILE_SCORE_WEIGHT = 0.5;
 static double NUM_MOVES_WEIGHT = 1.0;
-static double RELATION_SCORE_WEIGHT = 1.0;
+static double RELATION_SCORE_WEIGHT = 0.5;
 
 static int MOVE_BRACKET = (Board::BOARD_SIZE * Board::BOARD_SIZE - 8) / GamePartition::NUM_GAME_PARTITIONS;
 
@@ -35,6 +38,10 @@ void initializeGamePartitions() {
         game_partitions[i]->setDPDev(j_stats["std"]["Tiles"]);
         game_partitions[i]->setLMDev(j_stats["std"]["LM"]);
         game_partitions[i]->setNMDev(j_stats["std"]["Moves"]);
+
+
+        cout << j_stats["std"]["Tiles"] << endl;
+        i++;
     }
 }
 
@@ -59,9 +66,9 @@ double evaluateBoard(Board* e_board, char opt_player) {
     GamePartition* curr_gp = game_partitions[move_num / MOVE_BRACKET];
 
     // tile z-score 
-    double dp_z = curr_gp->calcDPZ(u_disk_parity);
+    double dp_z = abs(curr_gp->calcDPZ(u_disk_parity));
     // legal moves z-score 
-    double lm_z = curr_gp->calcLMZ(num_legal_moves);
+    double lm_z = abs(curr_gp->calcLMZ(num_legal_moves));
 
     // double nm_z = curr_gp->calcLMZ(moves_num);
     
@@ -71,6 +78,8 @@ double evaluateBoard(Board* e_board, char opt_player) {
     // tile relation score 
     double tile_relation_score = curr_gp->calcTileRelationScore(e_board, opt_player);
 
+    cout << "  Disk Parity: " << dp_z << endl;
+    cout << "  Lm: " << lm_z << endl;
     cout << "  Tile RS: " << tile_relation_score << endl;
     cout << "  Tile Sc: " << tile_score << endl;
 

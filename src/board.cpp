@@ -189,6 +189,12 @@ Board* Board::copyBoard() {
 
 void Board::makeMove(Move* n_move) {
 
+    if (n_move == nullptr) {
+        this->flipPlayer();
+        this->updateAllowedMoves();
+        return;
+    }
+
     const  std::vector<FlipType>& n_move_fts = n_move->getFlipTypes();
 
     FlipType curr_ft;

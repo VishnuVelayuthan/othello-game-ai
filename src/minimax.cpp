@@ -54,6 +54,13 @@ MMScoreMove* minimaxMaxABValue(Board* cs_board, int ply_count, char opt_player, 
         if (curr_min->getScore() >= beta) 
             return max_min_sm;
     }
+    
+    if (cs_operators->size() == 0) {
+        new_board = cs_board->copyBoard();
+        new_board->makeMove(nullptr);
+        max_min_sm = minimaxMinABValue(new_board, ply_count - 1, opt_player, alpha, beta);
+        delete new_board;
+    }
 
     return max_min_sm;
 } 
@@ -92,6 +99,12 @@ MMScoreMove* minimaxMinABValue(Board* cs_board, int ply_count, char opt_player, 
             return min_max_sm;
     }
 
+    if (cs_operators->size() == 0) {
+        new_board = cs_board->copyBoard();
+        new_board->makeMove(nullptr);
+        min_max_sm = minimaxMaxABValue(new_board, ply_count - 1, opt_player, alpha, beta);
+        delete new_board;
+    }
     return min_max_sm;
 }
 
