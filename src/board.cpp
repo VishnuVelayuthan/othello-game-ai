@@ -299,6 +299,16 @@ void Board::updateAllowedMoves() {
     this->allowed_moves = this->calculateBoardMoves(curr_turn_player);
 }
 
+char Board::whoWon() {
+    if (n_o_tiles > n_x_tiles + 1) 
+        return 'O';
+    else if (n_o_tiles < n_x_tiles + 1) 
+        return 'X';
+    else 
+        return 'D';
+}
+
+
 nlohmann::json Board::toJson() const {
     nlohmann::json j;
 

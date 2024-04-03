@@ -6,6 +6,9 @@
 #include "../include/openai/nlohmann/json.hpp"
 
 #include <cmath>
+#include <limits>
+#include <unordered_set>
+
 using namespace std;
 
 static double DISK_PARITY_WEIGHT = -1.0;
@@ -13,6 +16,9 @@ static double LEGAL_MOVE_WEIGHT = 2.0;
 static double TILE_SCORE_WEIGHT = 0.5;
 static double NUM_MOVES_WEIGHT = 1.0;
 static double RELATION_SCORE_WEIGHT = 0.5;
+
+static double MAX_DOUBLE = numeric_limits<double>::max();
+static double MIN_DOUBLE = numeric_limits<double>::min();
 
 static int MOVE_BRACKET = (Board::BOARD_SIZE * Board::BOARD_SIZE) / GamePartition::NUM_GAME_PARTITIONS;
 
@@ -55,13 +61,42 @@ void deleteGamePartitions() {
 double evaluateBoard(Board* e_board, char opt_player) {
 
     int move_num = 1 + e_board->getNumXTiles() + e_board->getNumOTiles() - 8;
-    bool is_u_board = opt_player == e_board->getCurrTurnPlayer();
+    bool is_u_x = opt_player == 'X';
+    bool is_u_curr = opt_player == e_board->getCurrTurnPlayer();
 
     // User's score 
-    int u_disk_parity = opt_player == 'X' ? 
+    int u_disk_parity = is_u_x ? 
         e_board->getNumXTiles() : e_board->getNumOTiles();
     
     int num_legal_moves = (e_board->getAllowedMoves())->size();
+
+    // case for when current player doesn't have any legal moves
+    // get calculate legal moves of next player 
+    // if that's equal then go into win or lose condition
+    if (num_legal_moves == 0) {
+        std::unordered_set<Move*, std::hash<Move*>, MovePointerDefEqual>* next_moves;
+        next_moves = e_board->calculateBoardMoves(is_u_x ? 'O' : 'X');
+
+        int next_num_legal_moves = next_moves->size();
+
+        next_moves->clear();
+        delete next_moves;
+
+        if (next_num_legal_moves == 0) {
+            char who_won = e_board->whoWon();
+            switch (who_won){
+                case 'X':
+                    return is_u_x ? MAX_DOUBLE : MIN_DOUBLE;
+                case 'Y':
+                    return is_u_x ? MIN_DOUBLE : MAX_DOUBLE;
+                default:
+                    return 0;
+            }
+    }
+
+        // if original player is not our player then we happy 
+        return is_u_curr ? MIN_DOUBLE / 2 : MAX_DOUBLE / 2; 
+    }
     
     GamePartition* curr_gp = game_partitions[move_num / MOVE_BRACKET];
 
@@ -85,7 +120,7 @@ double evaluateBoard(Board* e_board, char opt_player) {
 
 
     return (
-        dp_z * DISK_PARITY_WEIGHT +
+        dp_z +
         lm_z * LEGAL_MOVE_WEIGHT + 
         tile_score * TILE_SCORE_WEIGHT + 
         tile_relation_score * RELATION_SCORE_WEIGHT

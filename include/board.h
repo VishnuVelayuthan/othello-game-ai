@@ -45,6 +45,7 @@ public:
     void flipPlayer();
     void updateAllowedMoves();
 
+    char whoWon();
     double getTurnTime() {return this->curr_turn_time;};
 
 private:

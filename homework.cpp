@@ -12,7 +12,8 @@ int main() {
 
     initializeGamePartitions();
 
-    Board* board = new Board("input.txt");
+    // Board* board = new Board("input.txt");
+    Board* board = new Board("13-illegal-move.txt");
 
     int depth = 4;
 
@@ -50,13 +51,13 @@ int main() {
 
 
 // comment out and run make 
-#include "src/board.cpp"
-#include "src/check_board_utility.cpp"
-#include "src/flip_board_utility.cpp"
-#include "src/evaluate_board.cpp"
-#include "src/game_partition.cpp"
-#include "src/minimax.cpp"
-#include "src/minimax_ab.cpp"
+// #include "src/board.cpp"
+// #include "src/check_board_utility.cpp"
+// #include "src/flip_board_utility.cpp"
+// #include "src/evaluate_board.cpp"
+// #include "src/game_partition.cpp"
+// #include "src/minimax.cpp"
+// #include "src/minimax_ab.cpp"
 
 
 
