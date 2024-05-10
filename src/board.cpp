@@ -32,16 +32,16 @@ Board::Board(std::string file_name) {
     buffer >> this->curr_turn_player;
 
     // read timings left
-    double x_time;
-    double o_time;
+    double curr_time;
+    double opp_time;
     getline(infile, line);
     buffer = istringstream(line);
-    buffer >> x_time >> o_time;
+    buffer >> curr_time >> opp_time;
 
     if (curr_turn_player == 'X')
-        this->curr_turn_time = x_time;
+        this->curr_turn_time = curr_time;
     else 
-        this->curr_turn_time = o_time;
+        this->curr_turn_time = opp_time;
 
     // Read board into 2D Tile Array
     this->g_board = new Tile**[this->BOARD_SIZE];
@@ -306,6 +306,25 @@ char Board::whoWon() {
         return 'X';
     else 
         return 'D';
+}
+
+bool Board::isTerminalBoard() {
+    int num_curr_moves = allowed_moves->size();
+
+    if (num_curr_moves == 0) {
+        std::unordered_set<Move*, std::hash<Move*>, MovePointerDefEqual>* next_moves;
+        next_moves = this->calculateBoardMoves(curr_turn_player == 'X' ? 'O' : 'X');
+
+        int next_num_legal_moves = next_moves->size();
+
+        next_moves->clear();
+        delete next_moves;
+
+        if (next_num_legal_moves == 0)
+            return true;
+    }
+
+    return false;
 }
 
 

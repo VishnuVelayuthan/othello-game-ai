@@ -22,13 +22,14 @@ Move* minimaxAlphaBetaSearch(Board* s_board, int ply_count) {
 }
 
 MMScoreMove* minimaxMaxABValue(Board* cs_board, int ply_count, char opt_player, double alpha, double beta) {
-    if (ply_count == 0) 
+    if (ply_count == 0 || cs_board->isTerminalBoard()) 
         return new MMScoreMove(evaluateBoard(cs_board, opt_player), nullptr);
 
     MMScoreMove* max_min_sm = new MMScoreMove(-std::numeric_limits<double>::infinity(), nullptr);
     std::unordered_set<Move*, std::hash<Move*>, MovePointerDefEqual>* cs_operators = cs_board->getAllowedMoves();
 
     MMScoreMove* curr_min;
+    double curr_min_score;
     Board* new_board;
     Move* curr_operator;
     std::unordered_set<Move*, std::hash<Move*>, MovePointerDefEqual>::iterator it;
@@ -39,19 +40,20 @@ MMScoreMove* minimaxMaxABValue(Board* cs_board, int ply_count, char opt_player, 
         new_board->makeMove(curr_operator);
 
         curr_min = minimaxMinABValue(new_board, ply_count - 1, opt_player, alpha, beta);
+        curr_min_score = curr_min->getScore();
         
         // TODO Need a tie condition 
-        if (curr_min->getScore() > max_min_sm->getScore()) {
-            max_min_sm->setScore(curr_min->getScore());
+        if (curr_min_score > max_min_sm->getScore()) {
+            max_min_sm->setScore(curr_min_score);
             max_min_sm->setMove(curr_operator);
-            alpha = std::max(alpha, curr_min->getScore());
+            alpha = std::max(alpha, curr_min_score);
         }
 
         delete curr_min;
         delete new_board;
 
         // TODO Need a tie condition 
-        if (curr_min->getScore() >= beta) 
+        if (curr_min_score >= beta) 
             return max_min_sm;
     }
     
@@ -66,13 +68,14 @@ MMScoreMove* minimaxMaxABValue(Board* cs_board, int ply_count, char opt_player, 
 } 
 
 MMScoreMove* minimaxMinABValue(Board* cs_board, int ply_count, char opt_player, double alpha, double beta) {
-    if (ply_count == 0) 
+    if (ply_count == 0 || cs_board->isTerminalBoard()) 
         return new MMScoreMove(evaluateBoard(cs_board, opt_player), nullptr);
 
     MMScoreMove* min_max_sm = new MMScoreMove(std::numeric_limits<double>::infinity(), nullptr);
     std::unordered_set<Move*, std::hash<Move*>, MovePointerDefEqual>* cs_operators = cs_board->getAllowedMoves();
 
     MMScoreMove* curr_max;
+    double curr_max_score;
     Board* new_board;
     Move* curr_operator;
     std::unordered_set<Move*, std::hash<Move*>, MovePointerDefEqual>::iterator it;
@@ -83,19 +86,20 @@ MMScoreMove* minimaxMinABValue(Board* cs_board, int ply_count, char opt_player, 
         new_board->makeMove(curr_operator);
 
         curr_max = minimaxMaxABValue(new_board, ply_count - 1, opt_player, alpha, beta);
+        curr_max_score = curr_max->getScore();
         
         // TODO need a tie condition
-        if (curr_max->getScore() < min_max_sm->getScore()) {
-            min_max_sm->setScore(curr_max->getScore());
+        if (curr_max_score < min_max_sm->getScore()) {
+            min_max_sm->setScore(curr_max_score);
             min_max_sm->setMove(curr_operator);
-            beta = std::min(beta, curr_max->getScore());
+            beta = std::min(beta, curr_max_score);
         }
 
         delete curr_max;
         delete new_board;
 
         // Need a tie condition
-        if (curr_max->getScore() <= alpha)
+        if (curr_max_score <= alpha)
             return min_max_sm;
     }
 

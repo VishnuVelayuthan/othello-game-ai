@@ -46,6 +46,7 @@ public:
     void updateAllowedMoves();
 
     char whoWon();
+    bool isTerminalBoard();
     double getTurnTime() {return this->curr_turn_time;};
 
 private:

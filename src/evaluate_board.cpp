@@ -17,8 +17,8 @@ static double TILE_SCORE_WEIGHT = 0.5;
 static double NUM_MOVES_WEIGHT = 1.0;
 static double RELATION_SCORE_WEIGHT = 0.5;
 
-static double MAX_DOUBLE = numeric_limits<double>::max();
-static double MIN_DOUBLE = numeric_limits<double>::min();
+static double MAX_DOUBLE = 100000;
+static double MIN_DOUBLE =  -100000;
 
 static int MOVE_BRACKET = (Board::BOARD_SIZE * Board::BOARD_SIZE) / GamePartition::NUM_GAME_PARTITIONS;
 
@@ -69,34 +69,6 @@ double evaluateBoard(Board* e_board, char opt_player) {
         e_board->getNumXTiles() : e_board->getNumOTiles();
     
     int num_legal_moves = (e_board->getAllowedMoves())->size();
-
-    // case for when current player doesn't have any legal moves
-    // get calculate legal moves of next player 
-    // if that's equal then go into win or lose condition
-    if (num_legal_moves == 0) {
-        std::unordered_set<Move*, std::hash<Move*>, MovePointerDefEqual>* next_moves;
-        next_moves = e_board->calculateBoardMoves(is_u_x ? 'O' : 'X');
-
-        int next_num_legal_moves = next_moves->size();
-
-        next_moves->clear();
-        delete next_moves;
-
-        if (next_num_legal_moves == 0) {
-            char who_won = e_board->whoWon();
-            switch (who_won){
-                case 'X':
-                    return is_u_x ? MAX_DOUBLE : MIN_DOUBLE;
-                case 'Y':
-                    return is_u_x ? MIN_DOUBLE : MAX_DOUBLE;
-                default:
-                    return 0;
-            }
-    }
-
-        // if original player is not our player then we happy 
-        return is_u_curr ? MIN_DOUBLE / 2 : MAX_DOUBLE / 2; 
-    }
     
     GamePartition* curr_gp = game_partitions[move_num / MOVE_BRACKET];
 
@@ -118,12 +90,42 @@ double evaluateBoard(Board* e_board, char opt_player) {
     // cout << "  Tile RS: " << tile_relation_score << endl;
     // cout << "  Tile Sc: " << tile_score << endl;
 
+    double is_u_mult = is_u_curr ? 1 : -1;
+    double eval_score = calcEvalScore(is_u_mult, dp_z, lm_z, tile_score, tile_relation_score);
 
+    // case for when current player doesn't have any legal moves
+    // get calculate legal moves of next player 
+    // if that's equal then go into win or lose condition
+    if (num_legal_moves == 0) {
+
+        if (e_board->isTerminalBoard() == true) {
+            char who_won = e_board->whoWon();
+            cout << "made it here " << is_u_x << endl;
+            cout << e_board->toString() << endl;
+            switch (who_won){
+                case 'X':
+                    return is_u_x ?  MAX_DOUBLE : MIN_DOUBLE;
+                case 'O':
+                    return is_u_x ? MIN_DOUBLE : MAX_DOUBLE;
+                default:
+                    return 0;
+            }
+        }
+
+        // if original player is not our player then we happy 
+        return is_u_curr ? eval_score + MIN_DOUBLE / 2 : eval_score + MAX_DOUBLE / 2; 
+    }
+
+    return eval_score;
+
+}
+
+double calcEvalScore(double is_u_mult, double dp_z, double lm_z, double tile_score, double tile_relation_score) {
     return (
-        dp_z +
-        lm_z * LEGAL_MOVE_WEIGHT + 
+        dp_z + 
+        is_u_mult * lm_z * LEGAL_MOVE_WEIGHT + 
         tile_score * TILE_SCORE_WEIGHT + 
         tile_relation_score * RELATION_SCORE_WEIGHT
-    );
 
+    );
 }

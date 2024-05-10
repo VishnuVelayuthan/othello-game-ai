@@ -21,6 +21,8 @@ private:
 };
 
 double evaluateBoard(Board* e_board, char opt_player);
+double calcEvalScore(double is_u_mult, double dp_z, double lm_z, double tile_score, double tile_relation_score);
+
 Move* minimaxSearch(Board* s_board, int ply_count);
 Move* minimaxAlphaBetaSearch(Board* s_board, int ply_count);
 
