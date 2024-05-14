@@ -100,8 +100,6 @@ double evaluateBoard(Board* e_board, char opt_player) {
 
         if (e_board->isTerminalBoard() == true) {
             char who_won = e_board->whoWon();
-            cout << "made it here " << is_u_x << endl;
-            cout << e_board->toString() << endl;
             switch (who_won){
                 case 'X':
                     return is_u_x ?  MAX_DOUBLE : MIN_DOUBLE;

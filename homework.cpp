@@ -12,8 +12,9 @@ int main() {
 
     initializeGamePartitions();
 
-    // Board* board = new Board("input.txt");
-    Board* board = new Board("13-illegal-move.txt");
+    Board* board = new Board("input.txt");
+    // Board* board = new Board("input-files/13-illegal-move.txt");
+    // Board* board = new Board("input-files/19-draw.txt");
 
     int depth = 4;
 
@@ -26,22 +27,19 @@ int main() {
         depth = 8;
     else if (curr_time >= 200 && num_lm >= 6)
         depth = 6;
-    else if (curr_time < 200 && num_lm < 6) 
+    else if (curr_time > 100 && num_lm < 6) 
         depth = 6;
-    else if (curr_time < 100 && num_lm >= 6)
-        depth = 4;
-    else if (curr_time < 50)
-        depth = 4;
+    else if (curr_time > 100 && num_lm >= 6) 
+        depth = 5;
 
     Move* opt_move = minimaxAlphaBetaSearch(board, depth);
     
     std::ofstream outFile("output.txt");
     char col_l =  opt_move->getIcol() + 97;
-    outFile << col_l << opt_move->getIrow();
+    outFile << col_l << opt_move->getIrow() + 1;
 
     Board* move_board = board->copyBoard();
-    
-    
+    move_board->makeMove(opt_move);
 
     deleteGamePartitions();
     deleteNullMove();    
@@ -51,13 +49,13 @@ int main() {
 
 
 // comment out and run make 
-// #include "src/board.cpp"
-// #include "src/check_board_utility.cpp"
-// #include "src/flip_board_utility.cpp"
-// #include "src/evaluate_board.cpp"
-// #include "src/game_partition.cpp"
-// #include "src/minimax.cpp"
-// #include "src/minimax_ab.cpp"
+#include "src/board.cpp"
+#include "src/check_board_utility.cpp"
+#include "src/flip_board_utility.cpp"
+#include "src/evaluate_board.cpp"
+#include "src/game_partition.cpp"
+#include "src/minimax.cpp"
+#include "src/minimax_ab.cpp"
 
 
 
