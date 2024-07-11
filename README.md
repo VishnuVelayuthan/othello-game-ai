@@ -1,34 +1,6 @@
-# TODOS for HW2
+# Othello Game Ai
+This project is a Self-Reinforcement Learning Agent through AI Feedback model created to compete in the CSCI 561 Artifial Intelligence Graduate Class AI competition.
 
-- DD Figure out game state
-  - how to store board
-- DD Do file parsing
-
-  - read input format of othello board
-
-- DD Do calculateTurnMoves function
-
-  - move must be on empty space
-  - must be adjacent enemy piece
-  - must be in line with one of your pieces
-
-- DD Do playTurnMove
-  - Flip pieces based on choice
-  - calculate change of / total score
-  - toggle in place
-
-TODO
-
-- Do basic evaluation function
-- Do minimax
-- Do alpha-beta pruning
-- Do goated evaluation
-- Have to think about persistent game state
-  - keep track of your moves and opponents move
-  - keep track of last game state
-    - use last game state to calculate opponents move
-  - keep track of previous allowed moves
-  - then use their move to calculate how allowed moves changes
-    - HUGE OPTIMIZATION
-- Have to also think about calibration
-  - needa discuss with other people how they did their calibration
+The task was to make an AI model leveraging minimax, alpha-beta pruning, and a smart evaluation algorithm to beat the other classmates at an enlarged version of Othello.
+My model placed in the top 10% of the class. The innovation with this model was that I used ChatGPT as a game critic and a master AI to help my model learn from. This lead to
+much faster convergence to the optimal set of weights. By the end of training, the model was consistently beating GPT4-Turbo 85% of the time.
